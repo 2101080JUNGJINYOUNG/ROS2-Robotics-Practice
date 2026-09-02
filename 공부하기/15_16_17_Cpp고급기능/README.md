@@ -1,6 +1,6 @@
 # 15\~17장. C++ 고급 기능 — 공부하기
 
-> ⬆ [ROS2-Robotics-Practice로 돌아가기](https://github.com/2101080JUNGJINYOUNG/ROS2-Robotics-Practice/blob/main/README.md)  ·  📝 [실습 문제 풀어보기](./문제.md)
+> ⬆ [ROS2-Robotics-Practice로 돌아가기](https://github.com/2101080JUNGJINYOUNG/ROS2-Robotics-Practice)  ·  📝 [실습 문제 풀어보기](./문제.md)
 
 18\~20장(rclcpp) 코드를 보면 콜백 함수가 람다식, `std::bind`, 스마트 포인터로 가득 차 있습니다. 이 챕터의 문법을 미리 익혀두지 않으면 rclcpp 코드가 왜 이렇게 복잡한지 이해가 안 됩니다. 반대로 여기를 잡으면 18\~20장, 24\~25장 코드가 술술 읽힙니다.
 
@@ -147,4 +147,4 @@ Pub -.->|"더 이상 아무도<br/>참조 안 하면"| Free["카운트 0 -> 자�
 
 ---
 
-⬆ [ROS2-Robotics-Practice로 돌아가기](https://github.com/2101080JUNGJINYOUNG/ROS2-Robotics-Practice/blob/main/README.md)
+⬆ [ROS2-Robotics-Practice로 돌아가기](https://github.com/2101080JUNGJINYOUNG/ROS2-Robotics-Practice)  ·  📝 [실습 문제 풀어보기](./문제.md)  ·  ➡ [다음 장: 18\~20장. ROS2 rclcpp](../18_19_20_ROS2_rclcpp/README.md)
