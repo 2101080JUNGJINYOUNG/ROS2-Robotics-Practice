@@ -1,6 +1,6 @@
 # 13장. ROS2 파일시스템
 
-⬆ [ROS2-Robotics-Practice로 돌아가기](../)  ·  📘 [공부하기](../공부하기/13_ROS2파일시스템/)
+⬆ [ROS2-Robotics-Practice로 돌아가기](../README.md)  ·  📘 [공부하기](../공부하기/13_ROS2파일시스템/README.md)
 
 ROS2 패키지를 실제로 만들고 빌드하면서 파일시스템 구조를 익힌 실습입니다.
 
