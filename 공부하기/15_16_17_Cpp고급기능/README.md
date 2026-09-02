@@ -1,5 +1,7 @@
 # 15~17장. C++ 고급 기능 — 공부하기
 
+> 🏠 [메인 저장소로 돌아가기](https://github.com/2101080JUNGJINYOUNG/ROS2-Robotics-Practice)
+
 18~20장(rclcpp) 코드를 보면 콜백 함수가 람다식, `std::bind`, 스마트 포인터로 가득 차 있습니다. 이 챕터의 문법을 미리 익혀두지 않으면 rclcpp 코드가 왜 이렇게 복잡한지 이해가 안 됩니다. 반대로 여기를 잡으면 18~20장, 24~25장 코드가 술술 읽힙니다.
 
 ## 목차
@@ -129,3 +131,6 @@ graph TD
 - `std::bind`가 rclcpp 콜백 등록에서 실제로 어떤 문제를 해결해주는가?
 - `unique_ptr`와 `shared_ptr`의 차이(소유자 수)를 설명할 수 있는가?
 - rclcpp 노드가 왜 항상 `shared_ptr`로 관리되는지 설명할 수 있는가?
+---
+
+🏠 [메인 저장소로 돌아가기](https://github.com/2101080JUNGJINYOUNG/ROS2-Robotics-Practice)
