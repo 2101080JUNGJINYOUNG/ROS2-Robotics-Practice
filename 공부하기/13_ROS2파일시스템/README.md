@@ -4,7 +4,7 @@ ROS2 패키지를 실제로 만들고 빌드하면서 파일/폴더 구조를 �
 
 ## 목차
 
-- [1. 빌드 시스템 vs 빌드 툴](#1-빌드-시스템-build-system-vs-빌드-툴-build-tool)
+- [1. 빌드 시스템 vs 빌드 툴](#1-빌드-시스템build-system-vs-빌드-툴build-tool)
 - [2. 패키지 만들기](#2-패키지-만들기-ros2-pkg-create)
 - [3. 패키지 폴더 구조](#3-새로-생긴-패키지-폴더의-구조)
 - [4. 워크스페이스 루트에서 빌드하기](#4-워크스페이스-루트에서-빌드하기)
@@ -20,21 +20,40 @@ ROS2 패키지를 실제로 만들고 빌드하면서 파일/폴더 구조를 �
 
 정리: "빌드 시스템은 패키지 하나의 빌드 방법", "빌드 툴은 여러 패키지를 묶어 관리하는 오케스트레이터".
 
+```mermaid
+graph TD
+    Colcon["colcon (빌드 툴)<br/>워크스페이스 전체를 의존성 순서대로 빌드"]
+    Colcon --> PkgA["패키지 A<br/>(ament_cmake)"]
+    Colcon --> PkgB["패키지 B<br/>(ament_python)"]
+    PkgA -.->|"A가 B에 의존하면<br/>B를 먼저 빌드"| PkgB
+```
+
 ## 2. 패키지 만들기: `ros2 pkg create`
 
-```
-cd ~/ros2_ws/src                                    # 반드시 워크스페이스의 src/ 안에서 실행
+```bash
+# 반드시 워크스페이스의 src/ 안에서 실행 (다른 위치면 colcon build가 못 찾음)
+cd ~/ros2_ws/src
+# ament_cmake(C++) 빌드타입으로, rclcpp/std_msgs에 의존하는 first_pkg 패키지 생성
 ros2 pkg create first_pkg --build-type ament_cmake --dependencies rclcpp std_msgs
 ```
 
 - `--build-type ament_cmake` — C++ 패키지를 만들겠다는 뜻
 - `--dependencies rclcpp std_msgs` — 이 패키지가 `rclcpp`, `std_msgs`에 의존한다는 것을 등록해, `package.xml`과 `CMakeLists.txt`에 관련 설정이 자동으로 채워지게 함
 
-이 명령은 반드시 워크스페이스의 `src/` **안에서** 실행해야 합니다. 다른 위치에서 실행하면 나중에 `colcon build`가 이 패키지를 찾지 못합니다.
+> [!WARNING]
+> 이 명령은 반드시 워크스페이스의 `src/` **안에서** 실행해야 합니다. 다른 위치에서 실행하면 나중에 `colcon build`가 이 패키지를 찾지 못합니다.
 
 ## 3. 새로 생긴 패키지 폴더의 구조
 
 `tree -L 1 first_pkg`로 확인하면 다음이 보입니다.
+
+```mermaid
+graph TD
+    Root["first_pkg/"] --> CML["CMakeLists.txt<br/>(CMake 설정 파일)"]
+    Root --> PXML["package.xml<br/>(이름·버전·의존성 목록)"]
+    Root --> Inc["include/<br/>(헤더 파일 .hpp)"]
+    Root --> Src["src/<br/>(소스 코드 .cpp)"]
+```
 
 - **`CMakeLists.txt`**: 11장에서 배운 CMake 설정 파일 (`find_package`, `add_executable`을 여기에 직접 추가)
 - **`package.xml`**: 패키지의 이름, 버전, 설명, 의존성 목록 — colcon이 패키지 간 의존관계를 파악할 때 읽는 파일
@@ -43,8 +62,10 @@ ros2 pkg create first_pkg --build-type ament_cmake --dependencies rclcpp std_msg
 
 ## 4. 워크스페이스 루트에서 빌드하기
 
-```
-cd ~/ros2_ws                                          # 워크스페이스 루트로 이동 (패키지 폴더가 아님)
+```bash
+# 워크스페이스 루트로 이동 (패키지 폴더가 아니라 ros2_ws 최상위)
+cd ~/ros2_ws
+# first_pkg만 골라서 빌드, --symlink-install은 install 결과를 심볼릭 링크로 연결(재빌드 시 재설치 생략)
 colcon build --symlink-install --packages-select first_pkg
 ```
 
@@ -58,9 +79,13 @@ colcon build --symlink-install --packages-select first_pkg
 
 핵심은 "내가 직접 작성하고 관리하는 것은 오직 `src/` 뿐"이라는 점입니다.
 
-- `build/`, `install/`, `log/`는 전부 `colcon build`가 자동으로 생성하는 산출물이므로, 문제가 생기면 이 세 폴더를 통째로 지우고(`rm -rf build install log`) 다시 빌드해도 안전합니다 — 원본 소스(`src/`)는 그대로 남아있습니다.
-- 반대로 `src/`를 잘못 지우면 직접 작성한 코드가 사라지므로 절대 지우면 안 됩니다.
-- 이 원칙이 `.gitignore`에 `build/`, `install/`, `log/`만 등록하고 `src/`는 반드시 커밋해야 하는 이유입니다.
+> [!TIP]
+> `build/`, `install/`, `log/`는 전부 `colcon build`가 자동으로 생성하는 산출물이므로, 문제가 생기면 이 세 폴더를 통째로 지우고(`rm -rf build install log`) 다시 빌드해도 안전합니다 — 원본 소스(`src/`)는 그대로 남아있습니다.
+
+> [!CAUTION]
+> 반대로 `src/`를 잘못 지우면 직접 작성한 코드가 사라지므로 절대 지우면 안 됩니다.
+
+이 원칙이 `.gitignore`에 `build/`, `install/`, `log/`만 등록하고 `src/`는 반드시 커밋해야 하는 이유입니다.
 
 ## 6. 스스로 확인하는 질문
 
