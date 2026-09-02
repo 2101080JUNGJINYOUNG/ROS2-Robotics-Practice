@@ -1,6 +1,6 @@
 # 15~17장. C++ 고급 기능
 
-⬆ [ROS2-Robotics-Practice로 돌아가기](../)  ·  📘 [공부하기](../공부하기/15_16_17_Cpp고급기능/)
+⬆ [ROS2-Robotics-Practice로 돌아가기](../README.md)  ·  📘 [공부하기](../공부하기/15_16_17_Cpp고급기능/README.md)
 
 ROS2 콜백 코드에서 자주 쓰이는 C++ 고급 문법(람다, `std::function`, `std::bind`, 스마트 포인터)을 익힌 과제 3개를 묶었습니다.
 
