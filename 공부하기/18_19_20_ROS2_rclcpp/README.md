@@ -1,6 +1,6 @@
 # 18~20장. ROS2 rclcpp — 공부하기
 
-> 🏠 [메인 저장소로 돌아가기](https://github.com/2101080JUNGJINYOUNG/ROS2-Robotics-Practice)
+> 🏠 [메인 저장소로 돌아가기](https://github.com/2101080JUNGJINYOUNG/ROS2-Robotics-Practice)  ·  📝 [실습 문제 풀어보기](./문제.md)
 
 이 챕터부터는 직접 퍼블리셔/서브스크라이버 노드를 C++로 작성합니다. 06장(토픽 개념), 10장(인터페이스), 13장(패키지 구조), 15~17장(C++ 고급 문법)의 내용이 전부 여기서 실전 코드로 합쳐집니다.
 
@@ -20,20 +20,20 @@
 ## 2. 가장 기본적인 퍼블리셔 노드 뜯어보기 (rclcpp/project1~3)
 
 ```cpp
-rclcpp::init(argc, argv);                                            // (1)
-auto node = std::make_shared<rclcpp::Node>("node_pub2");             // (2)
-auto qos_profile = rclcpp::QoS(rclcpp::KeepLast(10));                // (3)
+rclcpp::init(argc, argv); // (1)
+auto node = std::make_shared<rclcpp::Node>("node_pub2"); // (2)
+auto qos_profile = rclcpp::QoS(rclcpp::KeepLast(10)); // (3)
 auto mypub = node->create_publisher<std_msgs::msg::Int32>("topic_pub2", qos_profile); // (4)
-std_msgs::msg::Int32 message;                                        // (5)
+std_msgs::msg::Int32 message; // (5)
 message.data = 0;
-rclcpp::WallRate loop_rate(1.0);                                     // (6)
-while (rclcpp::ok())                                                 // (7)
+rclcpp::WallRate loop_rate(1.0); // (6)
+while (rclcpp::ok()) // (7)
 {
-    RCLCPP_INFO(node->get_logger(), "Publish: %d", message.data++);  // (8)
-    mypub->publish(message);                                         // (9)
-    loop_rate.sleep();                                               // (10)
+  RCLCPP_INFO(node->get_logger(), "Publish: %d", message.data++); // (8)
+  mypub->publish(message); // (9)
+  loop_rate.sleep(); // (10)
 }
-rclcpp::shutdown();                                                  // (11)
+rclcpp::shutdown(); // (11)
 ```
 
 1. **`rclcpp::init`** — ROS2 시스템 초기화. 모든 rclcpp 프로그램은 이 줄로 시작합니다.
@@ -65,26 +65,26 @@ rclcpp::shutdown();                                                  // (11)
 
 ```mermaid
 sequenceDiagram
-    participant Main as main() (pub.cpp)
-    participant RCL as rclcpp 런타임
-    participant Timer as WallTimer
-    participant Pub as Publisher
-    participant Sub as Subscriber (sub.cpp)
+participant Main as main() (pub.cpp)
+participant RCL as rclcpp 런타임
+participant Timer as WallTimer
+participant Pub as Publisher
+participant Sub as Subscriber (sub.cpp)
 
-    Main->>RCL: rclcpp::init(argc, argv)
-    Main->>RCL: create_publisher<String>("topic_pub1")
-    Main->>RCL: create_wall_timer(100ms, fn)
-    Main->>RCL: rclcpp::spin(node)
-    activate RCL
-    loop 100ms마다 반복
-        RCL->>Timer: 100ms 경과 확인
-        Timer->>Pub: callback() 호출
-        Pub->>Sub: publish(message) → 토픽으로 전송
-        Sub->>Sub: mysub_callback(msg) 자동 호출
-    end
-    Note over Main,Sub: Ctrl+C(SIGINT) 발생 시 spin 루프 종료
-    deactivate RCL
-    Main->>RCL: rclcpp::shutdown()
+Main->>RCL: rclcpp::init(argc, argv)
+Main->>RCL: create_publisher<String>("topic_pub1")
+Main->>RCL: create_wall_timer(100ms, fn)
+Main->>RCL: rclcpp::spin(node)
+activate RCL
+loop 100ms마다 반복
+RCL->>Timer: 100ms 경과 확인
+Timer->>Pub: callback() 호출
+Pub->>Sub: publish(message) → 토픽으로 전송
+Sub->>Sub: mysub_callback(msg) 자동 호출
+end
+Note over Main,Sub: Ctrl+C(SIGINT) 발생 시 spin 루프 종료
+deactivate RCL
+Main->>RCL: rclcpp::shutdown()
 ```
 
 **퍼블리셔 (`pub.cpp`)**:
@@ -92,24 +92,24 @@ sequenceDiagram
 ```cpp
 // 타이머가 호출할 콜백 함수. node와 mypub을 매개변수로 받는다.
 void callback(rclcpp::Node::SharedPtr node,
-              rclcpp::Publisher<std_msgs::msg::String>::SharedPtr mypub)
+    rclcpp::Publisher<std_msgs::msg::String>::SharedPtr mypub)
 {
-    static auto message = std_msgs::msg::String();   // static: 함수 호출 사이에도 값 유지
-    message.data = "Hello World!!";                  // 발행할 문자열 데이터 설정
+    static auto message = std_msgs::msg::String(); // static: 함수 호출 사이에도 값 유지
+    message.data = "Hello World!!"; // 발행할 문자열 데이터 설정
     RCLCPP_INFO(node->get_logger(), "Publish: %s", message.data.c_str()); // 로그 출력
-    mypub->publish(message);                          // 메시지를 topic_pub1에 발행
+    mypub->publish(message); // 메시지를 topic_pub1에 발행
 }
 
 int main(int argc, char* argv[])
 {
-    rclcpp::init(argc, argv);                                     // ROS2 초기화
-    auto node = std::make_shared<rclcpp::Node>("node_pub1");      // "node_pub1" 노드 생성
-    auto qos_profile = rclcpp::QoS(rclcpp::KeepLast(10));         // 최근 10개 메시지만 버퍼 유지
+    rclcpp::init(argc, argv); // ROS2 초기화
+    auto node = std::make_shared<rclcpp::Node>("node_pub1"); // "node_pub1" 노드 생성
+    auto qos_profile = rclcpp::QoS(rclcpp::KeepLast(10)); // 최근 10개 메시지만 버퍼 유지
     auto mypub = node->create_publisher<std_msgs::msg::String>("topic_pub1", qos_profile); // 퍼블리셔 생성
-    std::function<void()> fn = std::bind(callback, node, mypub);   // (A)
-    auto timer = node->create_wall_timer(100ms, fn);               // (B)
-    rclcpp::spin(node);                                            // (C)
-    rclcpp::shutdown();                                            // ROS2 종료 및 자원 정리
+    std::function<void()> fn = std::bind(callback, node, mypub); // (A)
+    auto timer = node->create_wall_timer(100ms, fn); // (B)
+    rclcpp::spin(node); // (C)
+    rclcpp::shutdown(); // ROS2 종료 및 자원 정리
     return 0;
 }
 ```
@@ -131,14 +131,14 @@ void mysub_callback(rclcpp::Node::SharedPtr node, const std_msgs::msg::String::S
 
 int main(int argc, char* argv[])
 {
-    rclcpp::init(argc, argv);                                  // ROS2 초기화
-    auto node = std::make_shared<rclcpp::Node>("node_sub1");   // "node_sub1" 노드 생성
-    auto qos_profile = rclcpp::QoS(rclcpp::KeepLast(10));      // 최근 10개 메시지만 버퍼 유지
+    rclcpp::init(argc, argv); // ROS2 초기화
+    auto node = std::make_shared<rclcpp::Node>("node_sub1"); // "node_sub1" 노드 생성
+    auto qos_profile = rclcpp::QoS(rclcpp::KeepLast(10)); // 최근 10개 메시지만 버퍼 유지
     std::function<void(const std_msgs::msg::String::SharedPtr)> fn =
         std::bind(mysub_callback, node, std::placeholders::_1); // node 고정, msg는 나중에 채움
     auto mysub = node->create_subscription<std_msgs::msg::String>("topic_pub1", qos_profile, fn); // 구독 등록
-    rclcpp::spin(node);                                        // 콜백이 호출될 때까지 대기
-    rclcpp::shutdown();                                        // ROS2 종료 및 자원 정리
+    rclcpp::spin(node); // 콜백이 호출될 때까지 대기
+    rclcpp::shutdown(); // ROS2 종료 및 자원 정리
     return 0;
 }
 ```
@@ -158,6 +158,7 @@ int main(int argc, char* argv[])
 - `std::bind`가 `pub.cpp`와 `sub.cpp`에서 각각 어떤 문제를 해결하는가?
 - `create_wall_timer`와 `create_subscription`에 콜백을 등록할 때, 왜 콜백 함수의 "인자 개수"가 정확히 맞아야 하는가?
 - QoS의 `KeepLast(10)`이 실제로 무엇을 의미하는가? (03~05장과 연결)
+
 ---
 
 🏠 [메인 저장소로 돌아가기](https://github.com/2101080JUNGJINYOUNG/ROS2-Robotics-Practice)
