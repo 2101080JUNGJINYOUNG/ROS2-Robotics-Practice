@@ -1,5 +1,7 @@
 # 22장. 실습 로봇 소개 — 공부하기
 
+> 🏠 [메인 저장소로 돌아가기](https://github.com/2101080JUNGJINYOUNG/ROS2-Robotics-Practice)
+
 실습에 쓰인 하드웨어를 조사하는 과제입니다. 23~25장(카메라, 다이내믹셀, 라인검출)에서 이 장비들이 실제로 코드에 등장하므로, 여기서 장비 역할을 정확히 알아두면 뒤 챕터 코드가 "왜 이런 장치 경로(`/dev/video0`, `/dev/ttyUSB0`)를 쓰는지" 자연스럽게 이해됩니다.
 
 ## 목차
@@ -98,3 +100,6 @@ graph TD
 - CSI 카메라와 USB 카메라의 차이는?
 - Dynamixel 모터가 "일반 모터"와 다른 점은?
 - U2D2는 정확히 어떤 역할을 하는 장치인가?
+---
+
+🏠 [메인 저장소로 돌아가기](https://github.com/2101080JUNGJINYOUNG/ROS2-Robotics-Practice)
