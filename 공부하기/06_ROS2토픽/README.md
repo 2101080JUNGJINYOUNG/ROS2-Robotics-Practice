@@ -1,6 +1,6 @@
 # 06장. ROS2 토픽 — 공부하기
 
-> 🏠 [메인 저장소로 돌아가기](https://github.com/2101080JUNGJINYOUNG/ROS2-Robotics-Practice)
+> 🏠 [메인 저장소로 돌아가기](https://github.com/2101080JUNGJINYOUNG/ROS2-Robotics-Practice)  ·  📝 [실습 문제 풀어보기](./문제.md)
 
 `geometry_msgs/Twist` 메시지와 `ros2 topic` 명령어들을 이용해 turtlesim을 직접 제어하는 실습입니다. 아래 개념만 알면 실습을 그대로 따라 하고 이해할 수 있습니다.
 
