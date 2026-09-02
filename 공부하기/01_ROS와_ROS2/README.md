@@ -1,6 +1,6 @@
 # 01장. ROS와 ROS2 — 공부하기
 
-> 🏠 [메인 저장소로 돌아가기](https://github.com/2101080JUNGJINYOUNG/ROS2-Robotics-Practice)
+> 🏠 [메인 저장소로 돌아가기](https://github.com/2101080JUNGJINYOUNG/ROS2-Robotics-Practice)  ·  📝 [실습 문제 풀어보기](./문제.md)
 
 이 챕터의 과제는 "ROS가 뭔지"를 개념적으로 정리하는 것입니다. 코드나 명령어 실습이 아니라 용어 정의 과제이므로, 아래 개념들의 차이를 정확히 구분하면 과제를 충분히 풀 수 있습니다.
 
@@ -63,19 +63,19 @@ DDS(Data Distribution Service)는 ROS2에서 노드 간 통신을 담당하는 �
 
 ```mermaid
 graph TD
-    subgraph ROS1["ROS1: 중앙 서버(Master) 방식"]
-        M["roscore (Master)"]
-        A1["노드 A"] -- 등록/조회 --> M
-        B1["노드 B"] -- 등록/조회 --> M
-        M -- 중개 --> A1
-        M -- 중개 --> B1
-    end
+subgraph ROS1["ROS1: 중앙 서버(Master) 방식"]
+M["roscore (Master)"]
+A1["노드 A"] -- 등록/조회 --> M
+B1["노드 B"] -- 등록/조회 --> M
+M -- 중개 --> A1
+M -- 중개 --> B1
+end
 
-    subgraph ROS2["ROS2: DDS 분산형 방식"]
-        A2["노드 A"] <-- 자동 탐색(Dynamic Discovery) --> D["DDS 미들웨어"]
-        B2["노드 B"] <-- 자동 탐색(Dynamic Discovery) --> D
-        A2 <-. 직접 통신(P2P) .-> B2
-    end
+subgraph ROS2["ROS2: DDS 분산형 방식"]
+A2["노드 A"] <-- 자동 탐색(Dynamic Discovery) --> D["DDS 미들웨어"]
+B2["노드 B"] <-- 자동 탐색(Dynamic Discovery) --> D
+A2 <-. 직접 통신(P2P) .-> B2
+end
 ```
 
 > [!IMPORTANT]
@@ -97,6 +97,7 @@ DDS의 이런 특징은 [03~05장 공부하기](../03_04_05_ROS2특징과DDS/REA
 - ROS1과 ROS2의 통신 구조가 근본적으로 어떻게 다른지(Master 유무) 설명할 수 있는가?
 
 이 세 질문에 답할 수 있으면 01장 과제를 풀기에 충분한 배경지식을 갖춘 것입니다.
+
 ---
 
 🏠 [메인 저장소로 돌아가기](https://github.com/2101080JUNGJINYOUNG/ROS2-Robotics-Practice)
