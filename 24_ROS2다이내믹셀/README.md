@@ -1,6 +1,6 @@
 # 24장. ROS2 + Dynamixel(다이내믹셀) 제어
 
-⬆ [ROS2-Robotics-Practice로 돌아가기](../README.md)  ·  📘 [공부하기](../공부하기/24_ROS2다이내믹셀/README.md)
+⬆ [ROS2-Robotics-Practice로 돌아가기](https://github.com/2101080JUNGJINYOUNG/ROS2-Robotics-Practice)  ·  📘 [공부하기](../공부하기/24_ROS2다이내믹셀/README.md)
 
 
 Dynamixel 서보 모터를 ROS2 노드로 직접 제어해본 실습입니다. 두 차례에 걸쳐 진행되었습니다.
