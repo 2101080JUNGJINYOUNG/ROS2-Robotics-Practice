@@ -1,6 +1,6 @@
 # 22장. 실습 로봇 소개 — 공부하기
 
-> 🏠 [메인 저장소로 돌아가기](https://github.com/2101080JUNGJINYOUNG/ROS2-Robotics-Practice)
+> 🏠 [메인 저장소로 돌아가기](https://github.com/2101080JUNGJINYOUNG/ROS2-Robotics-Practice)  ·  📝 [실습 문제 풀어보기](./문제.md)
 
 실습에 쓰인 하드웨어를 조사하는 과제입니다. 23~25장(카메라, 다이내믹셀, 라인검출)에서 이 장비들이 실제로 코드에 등장하므로, 여기서 장비 역할을 정확히 알아두면 뒤 챕터 코드가 "왜 이런 장치 경로(`/dev/video0`, `/dev/ttyUSB0`)를 쓰는지" 자연스럽게 이해됩니다.
 
@@ -48,10 +48,10 @@
 
 ```mermaid
 graph TD
-    A["IMX219 카메라 센서"] -->|"CSI 인터페이스"| B["Jetson Nano"]
-    B -->|"GStreamer 파이프라인으로 캡처"| C["OpenCV Mat 변환"]
-    C -->|"ROS2 create_publisher"| D["ROS2 토픽 (topic_pub)"]
-    D -->|"같은 네트워크의 DDS 통신"| E["PC의 서브스크라이버 노드"]
+A["IMX219 카메라 센서"] -->|"CSI 인터페이스"| B["Jetson Nano"]
+B -->|"GStreamer 파이프라인으로 캡처"| C["OpenCV Mat 변환"]
+C -->|"ROS2 create_publisher"| D["ROS2 토픽 (topic_pub)"]
+D -->|"같은 네트워크의 DDS 통신"| E["PC의 서브스크라이버 노드"]
 ```
 
 > [!NOTE]
@@ -83,12 +83,12 @@ Jetson Nano --(USB)--> U2D2 --(UART)--> Dynamixel 모터 (여러 대 데이지�
 
 ```mermaid
 graph TD
-    Cam["IMX219 카메라"] -->|CSI| Jetson["Jetson Nano (로봇의 두뇌)"]
-    Jetson -->|GStreamer로 캡처| Node1["ROS2 노드 (카메라 퍼블리셔)"]
-    Node1 -->|토픽 발행| Topic1(("ROS2 토픽"))
-    Jetson -->|USB| U2D2["U2D2 (USB-시리얼 변환기)"]
-    U2D2 -->|UART / RS-485| M1["Dynamixel 모터 #1"]
-    U2D2 -->|데이지체인| M2["Dynamixel 모터 #2 ..."]
+Cam["IMX219 카메라"] -->|CSI| Jetson["Jetson Nano (로봇의 두뇌)"]
+Jetson -->|GStreamer로 캡처| Node1["ROS2 노드 (카메라 퍼블리셔)"]
+Node1 -->|토픽 발행| Topic1(("ROS2 토픽"))
+Jetson -->|USB| U2D2["U2D2 (USB-시리얼 변환기)"]
+U2D2 -->|UART / RS-485| M1["Dynamixel 모터 #1"]
+U2D2 -->|데이지체인| M2["Dynamixel 모터 #2 ..."]
 ```
 
 > [!TIP]
@@ -100,6 +100,7 @@ graph TD
 - CSI 카메라와 USB 카메라의 차이는?
 - Dynamixel 모터가 "일반 모터"와 다른 점은?
 - U2D2는 정확히 어떤 역할을 하는 장치인가?
+
 ---
 
 🏠 [메인 저장소로 돌아가기](https://github.com/2101080JUNGJINYOUNG/ROS2-Robotics-Practice)
