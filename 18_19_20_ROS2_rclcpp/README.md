@@ -1,6 +1,6 @@
 # 18~20장. ROS2 rclcpp (C++ 클라이언트 라이브러리)
 
-⬆ [ROS2-Robotics-Practice로 돌아가기](../README.md)  ·  📘 [공부하기](../공부하기/18_19_20_ROS2_rclcpp/README.md)
+⬆ [ROS2-Robotics-Practice로 돌아가기](https://github.com/2101080JUNGJINYOUNG/ROS2-Robotics-Practice)  ·  📘 [공부하기](../공부하기/18_19_20_ROS2_rclcpp/README.md)
 
 
 `rclcpp`를 이용해 퍼블리셔/서브스크라이버 노드를 직접 작성하며 ROS2 C++ 개발의 기본기를 익힌 3회차 실습입니다. 회차가 진행될수록 QoS, 타이머 콜백, `std::bind`를 활용한 콜백 구성 등 점점 더 실전에 가까운 패턴으로 발전합니다.
