@@ -11,7 +11,7 @@
 
 ## 15장 — 람다식과 std::function
 
-**일반 함수 vs 람다식**: 일반 함수는 이름을 붙여 미리 정의해두고 나중에 그 이름으로 출출합니다. 람다식(lambda expression)은 이름 없이 그 자리에서 즉석으로 만드는 함수입니다.
+**일반 함수 vs 람다식**: 일반 함수는 이름을 붙여 미리 정의해두고 나중에 그 이름으로 호출합니다. 람다식(lambda expression)은 이름 없이 그 자리에서 즉석으로 만드는 함수입니다.
 
 ```cpp
 auto add = [](int a, int b) { return a + b; };   // 람다식
@@ -51,7 +51,7 @@ int count = std::count_if(vec.begin(), vec.end(), isGreaterThan50); // 50보다 
 
 ```cpp
 std::function<void()> fn = std::bind(callback, node, mypub);
-// callback(node, mypub) 형태를, 인자 없이 fn() 만으로 출출 가능하게 고정
+// callback(node, mypub) 형태를, 인자 없이 fn() 만으로 호출 가능하게 고정
 ```
 
 타이머·구독 콜백은 ROS2 내부에서 정해진 형태(인자 없음, 또는 메시지 하나만 받음)로만 호출됩니다. 실제 콜백 안에서는 `node`나 `mypub` 같은 추가 정보도 필요한데, `std::bind`로 미리 "고정"해두면 ROS2가 기대하는 형태로 넘길 수 있습니다. `F&& f, Args&&... args` 같은 선언에 나오는 `&&`는 전달 참조(forwarding reference)로, "어떤 타입의 인자가 들어오든 원래 형태 그대로 안쪽 함수에 넘겨주기 위한 문법" 정도로만 알아두면 됩니다.
