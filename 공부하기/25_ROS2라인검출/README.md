@@ -1,5 +1,7 @@
 # 25장. ROS2 라인 검출 (Line Tracer) — 공부하기
 
+> 🏠 [메인 저장소로 돌아가기](https://github.com/2101080JUNGJINYOUNG/ROS2-Robotics-Practice)
+
 24장의 원격 조작 구조에서 "사람이 조종하던 것"을 "카메라 영상을 스스로 분석해서 판단하는 것"으로 바꾼 실습입니다. `pubpub`(영상 발행)과 `subsub`(영상 구독 + 라인 검출)로 나뉘며, 11장에서 배운 OpenCV 이진화 개념이 실전에서 라인 위치 계산까지 이어지는 과정이 핵심입니다.
 
 ## 목차
@@ -117,3 +119,6 @@ void mysub_callback(const sensor_msgs::msg::CompressedImage::SharedPtr msg)
 - `THRESH_OTSU`가 일반적인 고정 threshold 값보다 나은 점은?
 - 라인이 여러 개 검출될 때, 코드가 "이전 프레임과 가장 가까운 것"을 선택하는 이유는?
 - `error` 값이 실제로 로봇 제어에서 어떤 의미를 가지는가?
+---
+
+🏠 [메인 저장소로 돌아가기](https://github.com/2101080JUNGJINYOUNG/ROS2-Robotics-Practice)
