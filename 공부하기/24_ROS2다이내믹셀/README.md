@@ -10,6 +10,7 @@
 - [2. 제어 테이블 주소](#2-제어-테이블control-table-주소)
 - [3. 위치 제어 vs 속도 제어](#3-위치-제어-vs-속도-제어)
 - [4. 다이내믹셀2 — 원격 조작 구조](#4-다이내믹셀2--원격-조작teleoperation-구조)
+- [4-1. GStreamer 파이프라인 이해하기](#4-1-gstreamer-파이프라인-이해하기)
 - [5. 스스로 확인하는 질문](#5-스스로-확인하는-질문)
 
 ## 1. Dynamixel SDK란
@@ -96,6 +97,33 @@ style SUB fill:#69f,stroke:#333
 
 > [!TIP]
 > 모터 구동 경로와 카메라 영상 경로를 분리해두면, 영상 쪽에 문제가 생기거나(화면이 끊기거나) `우분투/sub.cpp` 창을 닫아도 모터 제어 자체는 영향받지 않습니다. 이렇게 관심사를 분리하는 설계는 실제 로봇 시스템에서 안전성을 높이는 핵심 원칙입니다.
+
+## 4-1. GStreamer 파이프라인 이해하기
+
+Jetson Nano는 일반 USB 웹캠이 아니라 CSI 카메라(IMX219)를 쓰기 때문에, OpenCV의 `VideoCapture`가 카메라를 열 때 일반 장치 경로(`/dev/video0`) 대신 **GStreamer 파이프라인 문자열**을 인자로 받습니다. 이 문자열은 `!`로 연결된 여러 "엘리먼트(element)"가 순서대로 영상을 처리하는 흐름을 나타냅니다.
+
+```cpp
+// jetson/pub.cpp에서 사용하는 GStreamer 파이프라인 (개념 정리용 축약)
+std::string pipeline =
+    "nvarguscamerasrc ! "
+    "video/x-raw(memory:NVMM), width=1280, height=720, framerate=30/1 ! "
+    "nvvidconv ! "
+    "video/x-raw, format=BGRx ! "
+    "videoconvert ! "
+    "video/x-raw, format=BGR ! "
+    "appsink";
+cv::VideoCapture cap(pipeline, cv::CAP_GSTREAMER);
+```
+
+각 엘리먼트가 담당하는 역할:
+
+- **`nvarguscamerasrc`**: Jetson의 CSI 카메라(IMX219)에서 하드웨어 가속으로 영상을 캡처하는 소스 엘리먼트입니다. 파이프라인의 시작점입니다.
+- **`video/x-raw(memory:NVMM), width=..., height=..., framerate=...`**: 캡처된 영상의 해상도·프레임레이트를 지정하는 caps(capability) 필터입니다. `NVMM`은 GPU 메모리에 영상을 그대로 두어 복사 없이 빠르게 처리한다는 뜻입니다.
+- **`nvvidconv`**: Jetson의 하드웨어 가속기를 이용해 영상 포맷을 변환하는 엘리먼트입니다. 여기서는 GPU 메모리의 영상을 일반 메모리로 옮기면서 포맷을 바꿉니다.
+- **`videoconvert`**: OpenCV의 `Mat`이 기대하는 `BGR` 포맷으로 최종 변환하는 소프트웨어 엘리먼트입니다(OpenCV는 기본적으로 BGR 순서를 사용합니다).
+- **`appsink`**: 파이프라인의 마지막 지점으로, 처리된 프레임을 애플리케이션(여기서는 OpenCV `VideoCapture`)에 전달하는 출구 역할을 합니다.
+
+정리하면 "카메라 하드웨어 캡처(`nvarguscamerasrc`) → GPU에서 포맷 변환(`nvvidconv`) → OpenCV용 BGR로 변환(`videoconvert`) → 애플리케이션에 전달(`appsink`)"의 흐름이며, 중간 단계를 하드웨어 가속으로 처리하기 때문에 Jetson Nano 같은 저전력 보드에서도 실시간으로 영상을 캡처할 수 있습니다.
 
 ## 5. 스스로 확인하는 질문
 
