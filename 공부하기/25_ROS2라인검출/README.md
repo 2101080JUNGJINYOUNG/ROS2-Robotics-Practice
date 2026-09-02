@@ -1,6 +1,6 @@
 # 25장. ROS2 라인 검출 (Line Tracer) — 공부하기
 
-> 🏠 [메인 저장소로 돌아가기](https://github.com/2101080JUNGJINYOUNG/ROS2-Robotics-Practice)
+> 🏠 [메인 저장소로 돌아가기](https://github.com/2101080JUNGJINYOUNG/ROS2-Robotics-Practice)  ·  📝 [실습 문제 풀어보기](./문제.md)
 
 24장의 원격 조작 구조에서 "사람이 조종하던 것"을 "카메라 영상을 스스로 분석해서 판단하는 것"으로 바꾼 실습입니다. `pubpub`(영상 발행)과 `subsub`(영상 구독 + 라인 검출)로 나뉘며, 11장에서 배운 OpenCV 이진화 개념이 실전에서 라인 위치 계산까지 이어지는 과정이 핵심입니다.
 
@@ -36,16 +36,16 @@
 
 ```mermaid
 flowchart TD
-    A["카메라 / 영상 파일"] --> B["pubpub 노드:<br/>VideoCapture로 프레임 읽기"]
-    B --> C["CompressedImage 토픽 발행<br/>(~30FPS, 33ms 주기)"]
-    C --> D["subsub 노드:<br/>imdecode로 압축 해제"]
-    D --> E["(1) cvtColor:<br/>그레이스케일 변환"]
-    E --> F["(2) ROI 자르기<br/>(하단 1/4 영역)"]
-    F --> G["(3) threshold + THRESH_OTSU:<br/>이진화"]
-    G --> H["(4) connectedComponentsWithStats:<br/>블롭(덩어리) 검출"]
-    H --> I["(5) 이전 프레임과 가장 가까운<br/>블롭을 라인으로 선택"]
-    I --> J["(6) error = 화면중심.x - 라인중심.x"]
-    J --> K["좌우 바퀴 속도 제어<br/>(비례 제어)"]
+A["카메라 / 영상 파일"] --> B["pubpub 노드:<br/>VideoCapture로 프레임 읽기"]
+B --> C["CompressedImage 토픽 발행<br/>(~30FPS, 33ms 주기)"]
+C --> D["subsub 노드:<br/>imdecode로 압축 해제"]
+D --> E["(1) cvtColor:<br/>그레이스케일 변환"]
+E --> F["(2) ROI 자르기<br/>(하단 1/4 영역)"]
+F --> G["(3) threshold + THRESH_OTSU:<br/>이진화"]
+G --> H["(4) connectedComponentsWithStats:<br/>블롭(덩어리) 검출"]
+H --> I["(5) 이전 프레임과 가장 가까운<br/>블롭을 라인으로 선택"]
+I --> J["(6) error = 화면중심.x - 라인중심.x"]
+J --> K["좌우 바퀴 속도 제어<br/>(비례 제어)"]
 ```
 
 **(1) 흑백 변환**: `cvtColor(frame, gray, COLOR_BGR2GRAY)`로 컬러 이미지를 흑백으로 바꿉니다. 라인의 색상 정보는 필요 없고 "밝은 배경과 어두운 선"의 명암 차이만 필요하므로, 흑백으로 바꾸면 이후 연산이 단순해집니다.
@@ -78,33 +78,33 @@ flowchart TD
 ```cpp
 void mysub_callback(const sensor_msgs::msg::CompressedImage::SharedPtr msg)
 {
-  // 압축된 JPEG 바이트 배열을 실제 컬러 이미지(Mat)로 복원
-  Mat frame = imdecode(Mat(msg->data), IMREAD_COLOR);
+    // 압축된 JPEG 바이트 배열을 실제 컬러 이미지(Mat)로 복원
+    Mat frame = imdecode(Mat(msg->data), IMREAD_COLOR);
 
-  // (1) 컬러 정보는 버리고 명암 정보만 남김 → 이후 연산 단순화
-  Mat gray;
-  cvtColor(frame, gray, COLOR_BGR2GRAY);
+    // (1) 컬러 정보는 버리고 명암 정보만 남김 → 이후 연산 단순화
+    Mat gray;
+    cvtColor(frame, gray, COLOR_BGR2GRAY);
 
-  // (2) 화면 아래쪽 1/4만 관심 영역(ROI)으로 사용 → 연산량 감소
-  Rect roi(0, gray.rows * 3 / 4, gray.cols, gray.rows / 4);
-  Mat cropped = gray(roi);
+    // (2) 화면 아래쪽 1/4만 관심 영역(ROI)으로 사용 → 연산량 감소
+    Rect roi(0, gray.rows * 3 / 4, gray.cols, gray.rows / 4);
+    Mat cropped = gray(roi);
 
-  // (3) Otsu 알고리즘으로 임계값을 자동 결정해 이진화(흑/백)
-  Mat binary;
-  threshold(cropped, binary, 0, 255, THRESH_BINARY | THRESH_OTSU);
+    // (3) Otsu 알고리즘으로 임계값을 자동 결정해 이진화(흑/백)
+    Mat binary;
+    threshold(cropped, binary, 0, 255, THRESH_BINARY | THRESH_OTSU);
 
-  // (4) 흰색(또는 검은색) 픽셀 덩어리를 라벨링하고, 각 덩어리의 통계(위치/크기/중심) 계산
-  Mat labels, stats, centroids;
-  int numLabels = connectedComponentsWithStats(binary, labels, stats, centroids);
+    // (4) 흰색(또는 검은색) 픽셀 덩어리를 라벨링하고, 각 덩어리의 통계(위치/크기/중심) 계산
+    Mat labels, stats, centroids;
+    int numLabels = connectedComponentsWithStats(binary, labels, stats, centroids);
 
-  // (5) 이전 프레임 위치와 가장 가까운 덩어리를 이번 프레임의 "라인"으로 선택
-  Point closestCenter = findClosestBlob(centroids, previousCenter, MAX_DISTANCE);
+    // (5) 이전 프레임 위치와 가장 가까운 덩어리를 이번 프레임의 "라인"으로 선택
+    Point closestCenter = findClosestBlob(centroids, previousCenter, MAX_DISTANCE);
 
-  // (6) 화면 중심과 라인 중심의 x좌표 차이 = 조향에 쓸 에러값
-  double error = centerOfImage.x - closestCenter.x;
+    // (6) 화면 중심과 라인 중심의 x좌표 차이 = 조향에 쓸 에러값
+    double error = centerOfImage.x - closestCenter.x;
 
-  // error를 비례 제어에 사용해 좌우 바퀴 속도를 계산하고 setVelocity()로 전달
-  applyProportionalControl(error);
+    // error를 비례 제어에 사용해 좌우 바퀴 속도를 계산하고 setVelocity()로 전달
+    applyProportionalControl(error);
 }
 ```
 
@@ -119,6 +119,7 @@ void mysub_callback(const sensor_msgs::msg::CompressedImage::SharedPtr msg)
 - `THRESH_OTSU`가 일반적인 고정 threshold 값보다 나은 점은?
 - 라인이 여러 개 검출될 때, 코드가 "이전 프레임과 가장 가까운 것"을 선택하는 이유는?
 - `error` 값이 실제로 로봇 제어에서 어떤 의미를 가지는가?
+
 ---
 
 🏠 [메인 저장소로 돌아가기](https://github.com/2101080JUNGJINYOUNG/ROS2-Robotics-Practice)
