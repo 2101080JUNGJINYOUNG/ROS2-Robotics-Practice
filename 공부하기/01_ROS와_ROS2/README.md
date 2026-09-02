@@ -1,6 +1,6 @@
 # 01장. ROS와 ROS2 — 공부하기
 
-> ⬆ [ROS2-Robotics-Practice로 돌아가기](https://github.com/2101080JUNGJINYOUNG/ROS2-Robotics-Practice/blob/main/README.md)  ·  📝 [실습 문제 풀어보기](./문제.md)
+> ⬆ [ROS2-Robotics-Practice로 돌아가기](https://github.com/2101080JUNGJINYOUNG/ROS2-Robotics-Practice)  ·  📝 [실습 문제 풀어보기](./문제.md)
 
 이 챕터의 과제는 "ROS가 뭔지"를 개념적으로 정리하는 것입니다. 코드나 명령어 실습이 아니라 용어 정의 과제이므로, 아래 개념들의 차이를 정확히 구분하면 과제를 충분히 풀 수 있습니다.
 
@@ -100,4 +100,4 @@ DDS의 이런 특징은 [03\~05장 공부하기](../03_04_05_ROS2특징과DDS/RE
 
 ---
 
-⬆ [ROS2-Robotics-Practice로 돌아가기](https://github.com/2101080JUNGJINYOUNG/ROS2-Robotics-Practice/blob/main/README.md)  ·  📝 [실습 문제 풀어보기](./문제.md)  ·  ➡ [다음 장: 02장. ROS2 개발환경 구축](../02_ROS2개발환경구축/README.md)
+⬆ [ROS2-Robotics-Practice로 돌아가기](https://github.com/2101080JUNGJINYOUNG/ROS2-Robotics-Practice)  ·  📝 [실습 문제 풀어보기](./문제.md)  ·  ➡ [다음 장: 02장. ROS2 개발환경 구축](../02_ROS2개발환경구축/README.md)
