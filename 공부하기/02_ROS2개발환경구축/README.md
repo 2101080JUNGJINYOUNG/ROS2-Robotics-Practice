@@ -18,9 +18,11 @@ ROS2는 설치되어 있다고 해서 바로 `ros2`, `colcon` 같은 명령을 �
 - 리눅스 셸은 `PATH`, `PYTHONPATH`, `LD_LIBRARY_PATH` 같은 환경변수를 보고 실행 파일과 라이브러리를 찾습니다.
 - ROS2 관련 경로는 기본 환경변수에 들어있지 않으므로, `source /opt/ros/foxy/setup.bash`로 이 환경변수들을 현재 터미널 세션에 추가해줘야 합니다.
 
-**왜 `source`로 실행해야 하는가**: 스크립트를 `./setup.bash`처럼 실행하면 별도의 자식 프로세스에서 실행되어 환경변수가 부모 셸(내가 쓰는 터미널)에 반영되지 않습니다. `source`(또는 `.`)로 실행하면 현재 셸 안에서 바로 실행되어 변경이 그대로 남습니다.
+> [!IMPORTANT]
+> **왜 `source`로 실행해야 하는가**: 스크립트를 `./setup.bash`처럼 실행하면 별도의 자식 프로세스에서 실행되어 환경변수가 부모 셸(내가 쓰는 터미널)에 반영되지 않습니다. `source`(또는 `.`)로 실행하면 현재 셸 안에서 바로 실행되어 변경이 그대로 남습니다.
 
-그래서 새 터미널을 열 때마다 이 명령을 실행해야 하고(또는 `~/.bashrc`에 등록해서 자동화), 실행하지 않으면 `ros2: command not found` 에러가 납니다.
+> [!WARNING]
+> 새 터미널을 열 때마다 이 명령을 실행해야 하고(또는 `~/.bashrc`에 등록해서 자동화), 실행하지 않으면 `ros2: command not found` 에러가 납니다.
 
 ## 2. `ros2 --help`, `colcon --help`
 
@@ -31,8 +33,10 @@ ROS2는 설치되어 있다고 해서 바로 `ros2`, `colcon` 같은 명령을 �
 
 ## 3. talker / listener로 확인하는 것
 
-```
+```bash
+# demo_nodes_cpp 패키지 안의 talker 실행 파일 실행 (C++로 작성된 퍼블리셔 노드, 터미널 1)
 ros2 run demo_nodes_cpp talker
+# demo_nodes_py 패키지 안의 listener 실행 파일 실행 (Python으로 작성된 서브스크라이버 노드, 터미널 2)
 ros2 run demo_nodes_py listener
 ```
 
@@ -43,13 +47,25 @@ ros2 run demo_nodes_py listener
 
 여기서 중요한 점: `talker`는 C++로, `listener`는 Python으로 만들어졌습니다. 서로 다른 언어로 만든 두 노드가 문제없이 통신한다는 것 자체가 "ROS2는 언어에 상관없이 토픽이라는 공통 인터페이스로 통신한다"는 것을 보여주는 가장 기본적인 검증입니다.
 
+```mermaid
+graph LR
+    A["talker 노드 (C++)"] -- publish --> T(("/chatter 토픽"))
+    T -- subscribe --> B["listener 노드 (Python)"]
+    subgraph MW["DDS 미들웨어 (언어 무관 공통 인터페이스)"]
+        T
+    end
+```
+
 ## 4. 워크스페이스란
 
 워크스페이스는 "내가 작업할 ROS2 패키지들을 모아두는 폴더 구조"입니다. 관례적으로 `~/ros2_ws/src` 아래에 패키지들을 만들고, `~/ros2_ws`에서 빌드합니다.
 
-```
+```bash
+# ~/ros2_ws/src 경로를 상위 폴더까지 한 번에 생성 (-p: 이미 있어도 에러 없이 통과, 없는 중간 경로도 함께 생성)
 mkdir -p ~/ros2_ws/src
+# 워크스페이스 최상위 폴더로 이동 (colcon build는 워크스페이스 루트에서 실행해야 함)
 cd ~/ros2_ws
+# src/ 안의 모든 패키지를 빌드. --symlink-install은 파일을 복사하지 않고 심볼릭 링크로 연결
 colcon build --symlink-install
 ```
 
@@ -67,6 +83,9 @@ colcon build --symlink-install
 이 세 환경변수는 보통 `~/.bashrc` 맨 아래에 추가해서, 터미널을 열 때마다 자동 적용되게 합니다.
 
 - **`ROS_DOMAIN_ID`**: 같은 네트워크 안에서 어떤 노드들끼리 서로를 발견할지 구분하는 값(0~232). 옆 사람의 ROS2 노드와 내 노드가 같은 네트워크(같은 와이파이 등)에 있다면, 서로 다른 값을 써서 통신이 섞이지 않게 분리할 수 있습니다.
+
+> [!TIP]
+> 실습실처럼 여러 사람이 같은 와이파이에서 동시에 turtlesim이나 talker/listener를 실행하면 서로의 토픽이 섞여 보일 수 있습니다. 이런 경우 각자 다른 `ROS_DOMAIN_ID` 값을 설정하면 통신이 분리됩니다.
 - **`ROS_NAMESPACE`**: 노드/토픽 이름 앞에 붙는 접두사. 예를 들어 `jetson0`으로 설정하면 노드들이 `/jetson0/노드이름`처럼 묶여, 로봇이 여러 대일 때 토픽을 구분할 수 있습니다.
 - **`RMW_IMPLEMENTATION`**: ROS2가 실제로 사용할 DDS 구현체(벤더)를 지정. ROS2는 DDS라는 표준(스펙)만 정의하고, 실제 구현은 Fast DDS, Cyclone DDS 등 여러 프로젝트가 제공하므로 이 변수로 선택합니다(기본값은 보통 Fast DDS).
 
