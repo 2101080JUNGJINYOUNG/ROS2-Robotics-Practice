@@ -1,6 +1,6 @@
 # 6장. ROS2 토픽
 
-⬆ [ROS2-Robotics-Practice로 돌아가기](../)  ·  📘 [공부하기](../공부하기/06_ROS2토픽/)
+⬆ [ROS2-Robotics-Practice로 돌아가기](../README.md)  ·  📘 [공부하기](../공부하기/06_ROS2토픽/README.md)
 
 `geometry_msgs/Twist` 메시지와 `ros2 topic` 명령어들을 이용해 turtlesim을 직접 제어하며 토픽 통신을 실습했습니다.
 
