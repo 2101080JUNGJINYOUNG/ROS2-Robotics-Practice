@@ -1,6 +1,6 @@
 # 23장. ROS2 카메라 (네트워크 설정 확인) — 공부하기
 
-> 🏠 [메인 저장소로 돌아가기](https://github.com/2101080JUNGJINYOUNG/ROS2-Robotics-Practice)
+> 🏠 [메인 저장소로 돌아가기](https://github.com/2101080JUNGJINYOUNG/ROS2-Robotics-Practice)  ·  📝 [실습 문제 풀어보기](./문제.md)
 
 이 챕터는 이름과 달리 카메라 코드를 다루지 않고, 로봇에 연결된 여러 장치(Jetson Nano, 내 PC 등)의 IP 주소를 확인해서 같은 네트워크에 있는지 점검하는 실습입니다. ROS2에서 여러 컴퓨터에 걸쳐 노드를 실행할 때 반드시 필요한 사전 점검 작업입니다.
 
@@ -23,14 +23,14 @@
 
 ```mermaid
 graph TD
-    subgraph Net["같은 네트워크 대역 (예: 192.168.0.x)"]
-        A["Jetson Nano<br/>ROS2 퍼블리셔 노드"]
-        B["내 PC/노트북<br/>ROS2 서브스크라이버 노드"]
-    end
-    R["공유기 (Wi-Fi/유선 라우터)"] --- A
-    R --- B
-    A -.->|"DDS Dynamic Discovery로 서로 자동 탐색"| B
-    A ==>|"토픽 발행"| B
+subgraph Net["같은 네트워크 대역 (예: 192.168.0.x)"]
+A["Jetson Nano<br/>ROS2 퍼블리셔 노드"]
+B["내 PC/노트북<br/>ROS2 서브스크라이버 노드"]
+end
+R["공유기 (Wi-Fi/유선 라우터)"] --- A
+R --- B
+A -.->|"DDS Dynamic Discovery로 서로 자동 탐색"| B
+A ==>|"토픽 발행"| B
 ```
 
 > [!IMPORTANT]
@@ -81,6 +81,7 @@ ipconfig
 - 두 장치가 물리적으로 케이블/와이파이로 연결되어 있어도 ROS2 통신이 안 될 수 있는 이유는?
 - IP 주소 `192.168.0.15`와 `192.168.0.42`가 같은 네트워크에 있다고 판단할 수 있는 근거는?
 - 리눅스와 윈도우에서 IP 주소를 확인하는 명령어는 각각 무엇인가?
+
 ---
 
 🏠 [메인 저장소로 돌아가기](https://github.com/2101080JUNGJINYOUNG/ROS2-Robotics-Practice)
