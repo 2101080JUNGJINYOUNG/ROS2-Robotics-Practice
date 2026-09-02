@@ -26,19 +26,29 @@ C++ 코드를 실행 파일로 만들려면 컴파일과 링크가 필요한데,
 2. **Generate(생성)**: Configure 결과를 바탕으로 실제 빌드 파일(리눅스에서는 보통 `Makefile`) 생성
 3. **Build(빌드)**: 생성된 `Makefile`을 실행해 컴파일/링크 수행
 
+```mermaid
+flowchart LR
+    A["CMakeLists.txt"] -->|"cmake .."| B["1 Configure<br/>(환경 확인 → CMakeCache.txt)"]
+    B --> C["2 Generate<br/>(Makefile 생성)"]
+    C -->|"cmake --build . (= make)"| D["3 Build<br/>(컴파일 + 링크)"]
+    D --> E["실행 파일(executable)"]
 ```
+
+```bash
+# build 폴더를 만들고 그 안으로 이동 (소스와 빌드 산출물을 분리하는 관례)
 mkdir build && cd build
 cmake ..              # 1) Configure + 2) Generate
 cmake --build .       # 3) Build (= make 와 동일한 효과)
 ```
 
-`CMakeCache.txt`가 꼬이면 `build/` 폴더를 통째로 지우고 처음부터 다시 `cmake ..`를 실행하는 것이 가장 확실한 해결법입니다.
+> [!TIP]
+> `CMakeCache.txt`가 꼬이면(설정을 바꿨는데 반영이 안 되는 등) `build/` 폴더를 통째로 지우고 처음부터 다시 `cmake ..`를 실행하는 것이 가장 확실한 해결법입니다.
 
 ## 3. `CMakeLists.txt` 기본 문법
 
 ```cmake
 cmake_minimum_required(VERSION 3.5)   # CMake 최소 요구 버전 지정
-project(adder)                        # 프로젝트 이름 지정
+project(adder)                        # 프로젝트 이름 지정 (프로젝트 변수들이 이 이름으로 생성됨)
 
 add_executable(adder main.cpp)        # main.cpp를 컴파일해서 adder 실행 파일 생성
 ```
@@ -48,23 +58,36 @@ add_executable(adder main.cpp)        # main.cpp를 컴파일해서 adder 실행
 ## 4. 외부 라이브러리(OpenCV) 쓰기 (11-2 실습)
 
 ```cmake
-cmake_minimum_required(VERSION 3.5)
-project(image_processing)
+cmake_minimum_required(VERSION 3.5)   # CMake 최소 요구 버전 지정
+project(image_processing)             # 프로젝트 이름 지정
 
-find_package(OpenCV REQUIRED)                       # 시스템에 설치된 OpenCV를 찾음
-add_executable(image_processing main.cpp)           # 실행 파일 생성
+find_package(OpenCV REQUIRED)                       # 시스템에 설치된 OpenCV를 찾음 (없으면 빌드 실패)
+add_executable(image_processing main.cpp)           # main.cpp로 image_processing 실행 파일 생성
 target_link_libraries(image_processing ${OpenCV_LIBS})  # OpenCV 라이브러리 연결(링크)
 ```
 
 - `find_package(OpenCV REQUIRED)` — OpenCV가 설치되어 있는지 찾고, 헤더/라이브러리 경로를 `OpenCV_LIBS` 등 변수에 채워 넣습니다. `REQUIRED`는 "못 찾으면 빌드 실패"라는 뜻입니다.
 - `add_executable(이름 소스파일...)` — 어떤 소스를 컴파일해서 어떤 이름의 실행 파일을 만들지 지정합니다.
-- `target_link_libraries(...)` — 컴파일된 오브젝트 파일에 외부 라이브러리를 연결합니다. 링크를 안 하면 OpenCV 함수 호출 코드는 컴파일은 되어도 링크 단계에서 "함수를 찾을 수 없다" 에러가 납니다.
+- `target_link_libraries(...)` — 컴파일된 오브젝트 파일에 외부 라이브러리를 연결합니다.
+
+> [!WARNING]
+> 링크를 안 하면(`target_link_libraries` 누락) OpenCV 함수 호출 코드는 컴파일은 되어도 링크 단계에서 "함수를 찾을 수 없다(undefined reference)" 에러가 납니다. 컴파일 에러와 링크 에러를 구분해서 원인을 찾는 습관이 중요합니다.
 
 레나(Lenna) 이미지를 그레이스케일/이진 영상으로 바꾸는 프로그램이 창 3개(원본/그레이스케일/이진화)를 띄우는 것은, `cvtColor`(색공간 변환)와 `threshold`(이진화)를 순서대로 적용한 결과를 각각 `imshow`로 띄우기 때문입니다. 이 이진화 개념은 25장 라인검출에서 라인 검출의 핵심 원리로 그대로 재사용됩니다.
 
 ## 5. ROS2 패키지의 CMakeLists.txt는 무엇이 다른가
 
 이 챕터는 순수 C++ 프로젝트를 다뤘지만, 13장부터는 ROS2 패키지의 `CMakeLists.txt`를 보게 됩니다. 기본 원리(Configure→Generate→Build, `find_package`, `add_executable`, `target_link_libraries`)는 동일하고, 차이는 `find_package(rclcpp REQUIRED)`처럼 ROS2 라이브러리를 찾거나 `ament_target_dependencies` 같은 ROS2 전용 헬퍼가 추가된다는 점뿐입니다.
+
+```mermaid
+graph TD
+    subgraph "순수 C++ 프로젝트 (이 챕터)"
+        A1["CMakeLists.txt"] --> A2["find_package(OpenCV)"] --> A3["add_executable"] --> A4["target_link_libraries"]
+    end
+    subgraph "ROS2 패키지 (13장부터)"
+        B1["CMakeLists.txt"] --> B2["find_package(rclcpp)"] --> B3["add_executable"] --> B4["ament_target_dependencies"]
+    end
+```
 
 ## 6. 스스로 확인하는 질문
 
