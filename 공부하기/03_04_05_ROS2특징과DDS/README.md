@@ -17,7 +17,7 @@
 **통신 구조**
 
 - ROS1(TCPROS + Master): `roscore`라는 중앙 서버(Master)가 반드시 떠 있어야 합니다. 모든 노드는 Master에 등록하고, Master가 통신할 노드들을 짝지어줍니다. 문제는 Master가 죽으면 새 노드가 기존 노드를 찾을 수 없다는 것(단일 장애점, Single Point of Failure)입니다.
-- ROS2(DDS + 분산형): Master가 없습니다. DDS가 네트워크에 브로드캐스트로 "나 여기 있다"는 신호를 주기적으로 보내고, 다른 노드들이 자동으로 서로를 찾습니다(Dynamic Discovery). 노드 하나가 죽어도 나머지 통신에는 영향이 없습니다.
+- ROS2(DDS + 분산형): Master가 없습니다. DDS가 네트워크에 멀티캐스트로 "나 여기 있다"는 신호를 주기적으로 보내고, 다른 노드들이 자동으로 서로를 찾습니다(Dynamic Discovery). 노드 하나가 죽어도 나머지 통신에는 영향이 없습니다.
 
 **TCPROS(ROS1의 통신 프로토콜)**
 
