@@ -5,7 +5,7 @@
 ## 목차
 
 - [1. rclcpp란](#1-rclcpp란)
-- [2. 기본 퍼블리셔 노드 뜯어보기](#2-가장-기본적인-퍼블리셔-노드-뜯어보기-rclcppproject1~3)
+- [2. 기본 퍼블리셔 노드 뜯어보기](#2-가장-기본적인-퍼블리셔-노드-뜯어보기-rclcppproject13)
 - [3. rclcpp2 — HZ 측정](#3-rclcpp2--hz-측정까지-포함된-발전된-실습)
 - [4. rclcpp3 — pub/sub 완전 분리](#4-rclcpp3--퍼블리셔서브스크라이버-완전-분리--콜백-구조-project1-project2)
 - [5. 빌드하기](#5-빌드하기)
@@ -50,34 +50,64 @@ rclcpp::shutdown();                                                  // (11)
 
 ## 3. rclcpp2 — HZ 측정까지 포함된 발전된 실습
 
-기본 구조는 rclcpp와 같지만, 실행 결과에 `ros2 topic hz`로 측정한 실제 발행 주파수(예: 9.993Hz, 주기 0.0993초)를 기록해 "의도한 주기(1Hz 등)와 실제 측정값이 일치하는지" 검증하는 단계가 추가되었습니다. `WallRate` 설정값과 실측값이 미세하게 다른 이유는 루프 안 로그 출력·발행에 걸리는 처리 시간만큼 `sleep`이 짧아지기 때문입니다.
+기본 구조는 rclcpp와 같지만, 실행 결과에 `ros2 topic hz`로 측정한 실제 발행 주파수(예: 9.993Hz, 주기 0.0993초)를 기록해 "의도한 주기(1Hz 등)와 실제 측정값이 일치하는지" 검증하는 단계가 추가되었습니다.
+
+> [!NOTE]
+> `WallRate` 설정값과 실측값이 미세하게 다른 이유는 루프 안 로그 출력·발행에 걸리는 처리 시간만큼 `sleep`이 짧아지기 때문입니다. 즉 `WallRate(1.0)`이 "정확히 1.000초마다"를 보장하는 것이 아니라 "최선을 다해 1초에 맞춘다"는 의미이므로, 실측값이 항상 목표값과 완전히 같지는 않습니다.
 
 ## 4. rclcpp3 — 퍼블리셔/서브스크라이버 완전 분리 + 콜백 구조 (project1, project2)
 
 여기서부터 람다/`std::bind`/타이머 콜백(15~17장)이 실전에 등장합니다.
 
+퍼블리셔와 서브스크라이버가 완전히 분리된 두 개의 프로세스로 실행되고, `rclcpp::spin()`이 콜백 호출 시점을 대신 관리해주는 전체 흐름은 다음과 같습니다.
+
+```mermaid
+sequenceDiagram
+    participant Main as main() (pub.cpp)
+    participant RCL as rclcpp 런타임
+    participant Timer as WallTimer
+    participant Pub as Publisher
+    participant Sub as Subscriber (sub.cpp)
+
+    Main->>RCL: rclcpp::init(argc, argv)
+    Main->>RCL: create_publisher<String>("topic_pub1")
+    Main->>RCL: create_wall_timer(100ms, fn)
+    Main->>RCL: rclcpp::spin(node)
+    activate RCL
+    loop 100ms마다 반복
+        RCL->>Timer: 100ms 경과 확인
+        Timer->>Pub: callback() 호출
+        Pub->>Sub: publish(message) → 토픽으로 전송
+        Sub->>Sub: mysub_callback(msg) 자동 호출
+    end
+    Note over Main,Sub: Ctrl+C(SIGINT) 발생 시 spin 루프 종료
+    deactivate RCL
+    Main->>RCL: rclcpp::shutdown()
+```
+
 **퍼블리셔 (`pub.cpp`)**:
 
 ```cpp
+// 타이머가 호출할 콜백 함수. node와 mypub을 매개변수로 받는다.
 void callback(rclcpp::Node::SharedPtr node,
               rclcpp::Publisher<std_msgs::msg::String>::SharedPtr mypub)
 {
-    static auto message = std_msgs::msg::String();
-    message.data = "Hello World!!";
-    RCLCPP_INFO(node->get_logger(), "Publish: %s", message.data.c_str());
-    mypub->publish(message);
+    static auto message = std_msgs::msg::String();   // static: 함수 호출 사이에도 값 유지
+    message.data = "Hello World!!";                  // 발행할 문자열 데이터 설정
+    RCLCPP_INFO(node->get_logger(), "Publish: %s", message.data.c_str()); // 로그 출력
+    mypub->publish(message);                          // 메시지를 topic_pub1에 발행
 }
 
 int main(int argc, char* argv[])
 {
-    rclcpp::init(argc, argv);
-    auto node = std::make_shared<rclcpp::Node>("node_pub1");
-    auto qos_profile = rclcpp::QoS(rclcpp::KeepLast(10));
-    auto mypub = node->create_publisher<std_msgs::msg::String>("topic_pub1", qos_profile);
+    rclcpp::init(argc, argv);                                     // ROS2 초기화
+    auto node = std::make_shared<rclcpp::Node>("node_pub1");      // "node_pub1" 노드 생성
+    auto qos_profile = rclcpp::QoS(rclcpp::KeepLast(10));         // 최근 10개 메시지만 버퍼 유지
+    auto mypub = node->create_publisher<std_msgs::msg::String>("topic_pub1", qos_profile); // 퍼블리셔 생성
     std::function<void()> fn = std::bind(callback, node, mypub);   // (A)
     auto timer = node->create_wall_timer(100ms, fn);               // (B)
     rclcpp::spin(node);                                            // (C)
-    rclcpp::shutdown();
+    rclcpp::shutdown();                                            // ROS2 종료 및 자원 정리
     return 0;
 }
 ```
@@ -91,28 +121,30 @@ int main(int argc, char* argv[])
 **서브스크라이버 (`sub.cpp`)**:
 
 ```cpp
+// 메시지 하나(msg)가 도착할 때마다 호출되는 콜백
 void mysub_callback(rclcpp::Node::SharedPtr node, const std_msgs::msg::String::SharedPtr msg)
 {
-    RCLCPP_INFO(node->get_logger(), "Received message: %s", msg->data.c_str());
+    RCLCPP_INFO(node->get_logger(), "Received message: %s", msg->data.c_str()); // 받은 메시지 출력
 }
 
 int main(int argc, char* argv[])
 {
-    rclcpp::init(argc, argv);
-    auto node = std::make_shared<rclcpp::Node>("node_sub1");
-    auto qos_profile = rclcpp::QoS(rclcpp::KeepLast(10));
+    rclcpp::init(argc, argv);                                  // ROS2 초기화
+    auto node = std::make_shared<rclcpp::Node>("node_sub1");   // "node_sub1" 노드 생성
+    auto qos_profile = rclcpp::QoS(rclcpp::KeepLast(10));      // 최근 10개 메시지만 버퍼 유지
     std::function<void(const std_msgs::msg::String::SharedPtr)> fn =
-        std::bind(mysub_callback, node, std::placeholders::_1);
-    auto mysub = node->create_subscription<std_msgs::msg::String>("topic_pub1", qos_profile, fn);
-    rclcpp::spin(node);
-    rclcpp::shutdown();
+        std::bind(mysub_callback, node, std::placeholders::_1); // node 고정, msg는 나중에 채움
+    auto mysub = node->create_subscription<std_msgs::msg::String>("topic_pub1", qos_profile, fn); // 구독 등록
+    rclcpp::spin(node);                                        // 콜백이 호출될 때까지 대기
+    rclcpp::shutdown();                                        // ROS2 종료 및 자원 정리
     return 0;
 }
 ```
 
 구독 콜백이 기대하는 형태는 "메시지 하나를 인자로 받는 함수"입니다. `mysub_callback`은 원래 `(node, msg)` 두 인자를 받으므로, `std::bind`로 `node`는 고정하고 `msg` 자리에는 `std::placeholders::_1`(나중에 채워질 자리)을 넣어 "메시지 하나만 받으면 되는" 형태로 바꿉니다. `create_subscription<타입>("토픽이름", qos, 콜백)`으로 같은 토픽(`"topic_pub1"`)을 구독하면, 퍼블리셔가 발행할 때마다 `mysub_callback`이 자동 호출됩니다.
 
-이 pub/sub 분리 + 콜백 구조는 24장(다이내믹셀 원격조작), 25장(라인검출)에서도 반복되는 ROS2의 가장 표준적인 패턴이므로, 여기서 확실히 이해해두는 것이 중요합니다.
+> [!IMPORTANT]
+> 이 pub/sub 분리 + 콜백 구조는 24장(다이내믹셀 원격조작), 25장(라인검출)에서도 반복되는 ROS2의 가장 표준적인 패턴이므로, 여기서 확실히 이해해두는 것이 중요합니다.
 
 ## 5. 빌드하기
 
