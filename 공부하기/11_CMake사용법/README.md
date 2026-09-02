@@ -1,5 +1,7 @@
 # 11장. CMake 사용법 — 공부하기
 
+> 🏠 [메인 저장소로 돌아가기](https://github.com/2101080JUNGJINYOUNG/ROS2-Robotics-Practice)
+
 ROS2의 C++ 패키지는 내부적으로 전부 CMake로 빌드됩니다. 이 챕터에서 CMake의 동작 원리를 확실히 잡아두면, 18~20장 이후 모든 실습 폴더의 `CMakeLists.txt`를 스스로 읽고 수정할 수 있게 됩니다.
 
 ## 목차
@@ -94,3 +96,6 @@ graph TD
 - CMake와 Make의 역할 차이를 한 문장으로 설명할 수 있는가?
 - Configure → Generate → Build 세 단계가 각각 무슨 일을 하는가?
 - `find_package`와 `target_link_libraries`는 각각 무엇을 하며, 둘 중 하나가 빠지면 어떤 에러가 나는가?
+---
+
+🏠 [메인 저장소로 돌아가기](https://github.com/2101080JUNGJINYOUNG/ROS2-Robotics-Practice)
