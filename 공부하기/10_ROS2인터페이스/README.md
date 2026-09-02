@@ -1,6 +1,6 @@
 # 10장. ROS2 인터페이스 — 공부하기
 
-> 🏠 [메인 저장소로 돌아가기](https://github.com/2101080JUNGJINYOUNG/ROS2-Robotics-Practice)
+> 🏠 [메인 저장소로 돌아가기](https://github.com/2101080JUNGJINYOUNG/ROS2-Robotics-Practice)  ·  📝 [실습 문제 풀어보기](./문제.md)
 
 "메시지, 토픽, 서비스, 액션, 인터페이스"라는 다섯 용어를 구분하고, 실제 인터페이스 구조를 조회해보는 실습입니다. 이 용어들은 뒤에 나오는 모든 챕터(특히 18~20장 rclcpp)에서 계속 등장하므로 여기서 확실히 구분해두면 이후 학습이 수월해집니다.
 
@@ -34,9 +34,9 @@
 
 ```mermaid
 graph LR
-    Pub["Publisher Node<br/>(발행자)"] -- "메시지 발행<br/>(비동기, 계속 흘려보냄)" --> Topic(("Topic"))
-    Topic --> Sub1["Subscriber Node 1<br/>(구독자)"]
-    Topic --> Sub2["Subscriber Node 2<br/>(구독자)"]
+Pub["Publisher Node<br/>(발행자)"] -- "메시지 발행<br/>(비동기, 계속 흘려보냄)" --> Topic(("Topic"))
+Topic --> Sub1["Subscriber Node 1<br/>(구독자)"]
+Topic --> Sub2["Subscriber Node 2<br/>(구독자)"]
 ```
 
 ## 4. 서비스 — 1:1 동기 요청/응답
@@ -47,11 +47,11 @@ graph LR
 
 ```mermaid
 sequenceDiagram
-    participant C as Client Node
-    participant S as Server Node
-    C->>S: Request (요청 전송)
-    Note right of S: 요청을 처리하는 동안<br/>클라이언트는 대기(동기)
-    S-->>C: Response (응답 반환)
+participant C as Client Node
+participant S as Server Node
+C->>S: Request (요청 전송)
+Note right of S: 요청을 처리하는 동안<br/>클라이언트는 대기(동기)
+S-->>C: Response (응답 반환)
 ```
 
 > [!TIP]
@@ -67,13 +67,13 @@ sequenceDiagram
 
 ```mermaid
 sequenceDiagram
-    participant C as Action Client
-    participant S as Action Server
-    C->>S: Goal (목표 전송)
-    loop 작업이 끝날 때까지
-        S-->>C: Feedback (중간 진행상황)
-    end
-    S-->>C: Result (최종 결과)
+participant C as Action Client
+participant S as Action Server
+C->>S: Goal (목표 전송)
+loop 작업이 끝날 때까지
+S-->>C: Feedback (중간 진행상황)
+end
+S-->>C: Result (최종 결과)
 ```
 
 예: "로봇을 목적지까지 이동시켜라"는 몇 초~몇 분 걸리고 중간 경과가 궁금하므로 액션이 적합하고, "현재 위치가 어디야?"는 즉시 답할 수 있으므로 서비스가 적합합니다.
@@ -105,6 +105,7 @@ ros2 interface show geometry_msgs/msg/Twist
 - 아래 세 상황에 토픽/서비스/액션 중 무엇을 써야 할지 답해보기: (1) 카메라 영상을 계속 화면에 뿌려야 한다 (2) 로봇에게 "지금 배터리 몇 %야?" 물어봐야 한다 (3) 로봇에게 "저기까지 이동해"라고 시키고 중간에 얼마나 갔는지도 보고 싶다.
 - `.msg`, `.srv`, `.action` 파일이 각각 무엇을 정의하는가?
 - `ros2 interface show`는 왜 필요한가? (코드를 직접 보지 않고도 무엇을 알 수 있는가)
+
 ---
 
 🏠 [메인 저장소로 돌아가기](https://github.com/2101080JUNGJINYOUNG/ROS2-Robotics-Practice)
