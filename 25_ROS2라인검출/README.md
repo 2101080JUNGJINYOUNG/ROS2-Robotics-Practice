@@ -1,6 +1,6 @@
 # 25장. ROS2 라인 검출 (Line Tracer)
 
-⬆ [ROS2-Robotics-Practice로 돌아가기](../README.md)  ·  📘 [공부하기](../공부하기/25_ROS2라인검출/README.md)
+⬆ [ROS2-Robotics-Practice로 돌아가기](https://github.com/2101080JUNGJINYOUNG/ROS2-Robotics-Practice)  ·  📘 [공부하기](../공부하기/25_ROS2라인검출/README.md)
 
 
 카메라 영상을 이용해 라인을 검출하고 그에 맞춰 주행하는 라인 트레이서 실습입니다. 영상을 ROS2 토픽으로 발행하는 `pubpub` 노드와, 그 영상을 받아 라인을 검출·처리하는 `subsub` 노드로 구성되어 있습니다.
