@@ -40,7 +40,20 @@
 
 리눅스 계열에서 널리 쓰이는 오픈소스 멀티미디어 프레임워크로, 카메라 캡처 → 인코딩/디코딩 → 화면 출력/네트워크 전송 과정을 "파이프라인" 형태로 구성합니다.
 
-24장(다이내믹셀 원격조작)의 `jetson/pub.cpp`가 "GStreamer로 Jetson 카메라 영상을 읽어 토픽으로 발행"한다는 것은, GStreamer 파이프라인으로 카메라 하드웨어에서 영상을 가져와 OpenCV `Mat` 형태로 변환해 ROS2 토픽에 실어 보낸다는 뜻입니다. CSI 카메라는 일반 USB 카메라처럼 `VideoCapture(0)`로 바로 열리지 않는 경우가 많아, GStreamer 파이프라인 문자열로 여는 방식이 Jetson 계열 보드에서 일반적으로 쓰입니다.
+24장(다이내믹셀 원격조작)의 `jetson/pub.cpp`가 "GStreamer로 Jetson 카메라 영상을 읽어 토픽으로 발행"한다는 것은, GStreamer 파이프라인으로 카메라 하드웨어에서 영상을 가져와 OpenCV `Mat` 형태로 변환해 ROS2 토픽에 실어 보낸다는 뜻입니다.
+
+카메라 영상이 실제 하드웨어에서 다른 컴퓨터의 구독자까지 전달되는 전체 경로는 다음과 같습니다.
+
+```mermaid
+graph TD
+    A["IMX219 카메라 센서"] -->|"CSI 인터페이스"| B["Jetson Nano"]
+    B -->|"GStreamer 파이프라인으로 캡처"| C["OpenCV Mat 변환"]
+    C -->|"ROS2 create_publisher"| D["ROS2 토픽 (topic_pub)"]
+    D -->|"같은 네트워크의 DDS 통신"| E["PC의 서브스크라이버 노드"]
+```
+
+> [!NOTE]
+> CSI 카메라는 일반 USB 카메라처럼 `VideoCapture(0)`로 바로 열리지 않는 경우가 많습니다. 그래서 Jetson 계열 보드에서는 GStreamer 파이프라인 문자열(예: `nvarguscamerasrc ! ... ! appsink`)을 `VideoCapture`에 직접 넘겨서 여는 방식이 일반적으로 쓰입니다.
 
 ## 5. Dynamixel — 로봇의 "관절/근육"
 
@@ -64,7 +77,20 @@ IMX219 카메라 --(CSI)--> Jetson Nano --(GStreamer로 캡처)--> ROS2 노드 -
 Jetson Nano --(USB)--> U2D2 --(UART)--> Dynamixel 모터 (여러 대 데이지체인 연결 가능)
 ```
 
-이 그림을 기억해두면 23장(카메라 네트워크 확인), 24장(다이내믹셀 제어) 코드에서 왜 `/dev/video0`, `/dev/ttyUSB0` 같은 장치 파일 경로가 등장하는지 자연스럽게 이해됩니다.
+같은 내용을 하드웨어 연결도로 표현하면 다음과 같습니다.
+
+```mermaid
+graph TD
+    Cam["IMX219 카메라"] -->|CSI| Jetson["Jetson Nano (로봇의 두뇌)"]
+    Jetson -->|GStreamer로 캡처| Node1["ROS2 노드 (카메라 퍼블리셔)"]
+    Node1 -->|토픽 발행| Topic1(("ROS2 토픽"))
+    Jetson -->|USB| U2D2["U2D2 (USB-시리얼 변환기)"]
+    U2D2 -->|UART / RS-485| M1["Dynamixel 모터 #1"]
+    U2D2 -->|데이지체인| M2["Dynamixel 모터 #2 ..."]
+```
+
+> [!TIP]
+> 이 그림을 기억해두면 23장(카메라 네트워크 확인), 24장(다이내믹셀 제어) 코드에서 왜 `/dev/video0`, `/dev/ttyUSB0` 같은 장치 파일 경로가 등장하는지 자연스럽게 이해됩니다.
 
 ## 8. 스스로 확인하는 질문
 
