@@ -1,6 +1,6 @@
 # 10장. ROS2 인터페이스 — 공부하기
 
-> 🏠 [메인 저장소로 돌아가기](https://github.com/2101080JUNGJINYOUNG/ROS2-Robotics-Practice)  ·  📝 [실습 문제 풀어보기](./문제.md)
+> ⬆ [ROS2-Robotics-Practice로 돌아가기](https://github.com/2101080JUNGJINYOUNG/ROS2-Robotics-Practice/blob/main/README.md)  ·  📝 [실습 문제 풀어보기](./문제.md)
 
 "메시지, 토픽, 서비스, 액션, 인터페이스"라는 다섯 용어를 구분하고, 실제 인터페이스 구조를 조회해보는 실습입니다. 이 용어들은 뒤에 나오는 모든 챕터(특히 18\~20장 rclcpp)에서 계속 등장하므로 여기서 확실히 구분해두면 이후 학습이 수월해집니다.
 
@@ -108,4 +108,4 @@ ros2 interface show geometry_msgs/msg/Twist
 
 ---
 
-🏠 [메인 저장소로 돌아가기](https://github.com/2101080JUNGJINYOUNG/ROS2-Robotics-Practice)
+⬆ [ROS2-Robotics-Practice로 돌아가기](https://github.com/2101080JUNGJINYOUNG/ROS2-Robotics-Practice/blob/main/README.md)
