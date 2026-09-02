@@ -100,4 +100,4 @@ DDS의 이런 특징은 [03\~05장 공부하기](../03_04_05_ROS2특징과DDS/RE
 
 ---
 
-⬆ [ROS2-Robotics-Practice로 돌아가기](https://github.com/2101080JUNGJINYOUNG/ROS2-Robotics-Practice/blob/main/README.md)
+⬆ [ROS2-Robotics-Practice로 돌아가기](https://github.com/2101080JUNGJINYOUNG/ROS2-Robotics-Practice/blob/main/README.md)  ·  📝 [실습 문제 풀어보기](./문제.md)  ·  ➡ [다음 장: 02장. ROS2 개발환경 구축](../02_ROS2개발환경구축/README.md)
