@@ -1,6 +1,6 @@
 # 11장. CMake 사용법 — 공부하기
 
-> 🏠 [메인 저장소로 돌아가기](https://github.com/2101080JUNGJINYOUNG/ROS2-Robotics-Practice)
+> 🏠 [메인 저장소로 돌아가기](https://github.com/2101080JUNGJINYOUNG/ROS2-Robotics-Practice)  ·  📝 [실습 문제 풀어보기](./문제.md)
 
 ROS2의 C++ 패키지는 내부적으로 전부 CMake로 빌드됩니다. 이 챕터에서 CMake의 동작 원리를 확실히 잡아두면, 18~20장 이후 모든 실습 폴더의 `CMakeLists.txt`를 스스로 읽고 수정할 수 있게 됩니다.
 
@@ -30,17 +30,17 @@ C++ 코드를 실행 파일로 만들려면 컴파일과 링크가 필요한데,
 
 ```mermaid
 flowchart LR
-    A["CMakeLists.txt"] -->|"cmake .."| B["1 Configure<br/>(환경 확인 → CMakeCache.txt)"]
-    B --> C["2 Generate<br/>(Makefile 생성)"]
-    C -->|"cmake --build . (= make)"| D["3 Build<br/>(컴파일 + 링크)"]
-    D --> E["실행 파일(executable)"]
+A["CMakeLists.txt"] -->|"cmake .."| B["1 Configure<br/>(환경 확인 → CMakeCache.txt)"]
+B --> C["2 Generate<br/>(Makefile 생성)"]
+C -->|"cmake --build . (= make)"| D["3 Build<br/>(컴파일 + 링크)"]
+D --> E["실행 파일(executable)"]
 ```
 
 ```bash
 # build 폴더를 만들고 그 안으로 이동 (소스와 빌드 산출물을 분리하는 관례)
 mkdir build && cd build
-cmake ..              # 1) Configure + 2) Generate
-cmake --build .       # 3) Build (= make 와 동일한 효과)
+cmake .. # 1) Configure + 2) Generate
+cmake --build . # 3) Build (= make 와 동일한 효과)
 ```
 
 > [!TIP]
@@ -49,10 +49,10 @@ cmake --build .       # 3) Build (= make 와 동일한 효과)
 ## 3. `CMakeLists.txt` 기본 문법
 
 ```cmake
-cmake_minimum_required(VERSION 3.5)   # CMake 최소 요구 버전 지정
-project(adder)                        # 프로젝트 이름 지정 (프로젝트 변수들이 이 이름으로 생성됨)
+cmake_minimum_required(VERSION 3.5) # CMake 최소 요구 버전 지정
+project(adder) # 프로젝트 이름 지정 (프로젝트 변수들이 이 이름으로 생성됨)
 
-add_executable(adder main.cpp)        # main.cpp를 컴파일해서 adder 실행 파일 생성
+add_executable(adder main.cpp) # main.cpp를 컴파일해서 adder 실행 파일 생성
 ```
 
 `adder` 프로젝트(정수 두 개를 더해 출력)처럼 단순한 프로그램은 이 세 줄만으로 충분합니다.
@@ -60,12 +60,12 @@ add_executable(adder main.cpp)        # main.cpp를 컴파일해서 adder 실행
 ## 4. 외부 라이브러리(OpenCV) 쓰기 (11-2 실습)
 
 ```cmake
-cmake_minimum_required(VERSION 3.5)   # CMake 최소 요구 버전 지정
-project(image_processing)             # 프로젝트 이름 지정
+cmake_minimum_required(VERSION 3.5) # CMake 최소 요구 버전 지정
+project(image_processing) # 프로젝트 이름 지정
 
-find_package(OpenCV REQUIRED)                       # 시스템에 설치된 OpenCV를 찾음 (없으면 빌드 실패)
-add_executable(image_processing main.cpp)           # main.cpp로 image_processing 실행 파일 생성
-target_link_libraries(image_processing ${OpenCV_LIBS})  # OpenCV 라이브러리 연결(링크)
+find_package(OpenCV REQUIRED) # 시스템에 설치된 OpenCV를 찾음 (없으면 빌드 실패)
+add_executable(image_processing main.cpp) # main.cpp로 image_processing 실행 파일 생성
+target_link_libraries(image_processing ${OpenCV_LIBS}) # OpenCV 라이브러리 연결(링크)
 ```
 
 - `find_package(OpenCV REQUIRED)` — OpenCV가 설치되어 있는지 찾고, 헤더/라이브러리 경로를 `OpenCV_LIBS` 등 변수에 채워 넣습니다. `REQUIRED`는 "못 찾으면 빌드 실패"라는 뜻입니다.
@@ -83,12 +83,12 @@ target_link_libraries(image_processing ${OpenCV_LIBS})  # OpenCV 라이브러리
 
 ```mermaid
 graph TD
-    subgraph "순수 C++ 프로젝트 (이 챕터)"
-        A1["CMakeLists.txt"] --> A2["find_package(OpenCV)"] --> A3["add_executable"] --> A4["target_link_libraries"]
-    end
-    subgraph "ROS2 패키지 (13장부터)"
-        B1["CMakeLists.txt"] --> B2["find_package(rclcpp)"] --> B3["add_executable"] --> B4["ament_target_dependencies"]
-    end
+subgraph "순수 C++ 프로젝트 (이 챕터)"
+A1["CMakeLists.txt"] --> A2["find_package(OpenCV)"] --> A3["add_executable"] --> A4["target_link_libraries"]
+end
+subgraph "ROS2 패키지 (13장부터)"
+B1["CMakeLists.txt"] --> B2["find_package(rclcpp)"] --> B3["add_executable"] --> B4["ament_target_dependencies"]
+end
 ```
 
 ## 6. 스스로 확인하는 질문
@@ -96,6 +96,7 @@ graph TD
 - CMake와 Make의 역할 차이를 한 문장으로 설명할 수 있는가?
 - Configure → Generate → Build 세 단계가 각각 무슨 일을 하는가?
 - `find_package`와 `target_link_libraries`는 각각 무엇을 하며, 둘 중 하나가 빠지면 어떤 에러가 나는가?
+
 ---
 
 🏠 [메인 저장소로 돌아가기](https://github.com/2101080JUNGJINYOUNG/ROS2-Robotics-Practice)
