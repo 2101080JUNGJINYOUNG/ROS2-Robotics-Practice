@@ -1,6 +1,6 @@
 # 23장. 네트워크 설정 확인 실습
 
-⬆ [ROS2-Robotics-Practice로 돌아가기](../README.md)  ·  📘 [공부하기](../공부하기/23_ROS2카메라/README.md)
+⬆ [ROS2-Robotics-Practice로 돌아가기](https://github.com/2101080JUNGJINYOUNG/ROS2-Robotics-Practice)  ·  📘 [공부하기](../공부하기/23_ROS2카메라/README.md)
 
 원본 파일명은 "ROS2카메라1"이지만, 실제 내용은 로봇에 연결된 여러 장치의 네트워크 설정(IP 주소 등)을 확인하고 같은 네트워크 대역에 있는지 점검한 실습 기록입니다.
 
