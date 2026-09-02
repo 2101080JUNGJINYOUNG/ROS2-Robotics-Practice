@@ -1,6 +1,6 @@
 # 11장. CMake 사용법 — 공부하기
 
-> ⬆ [ROS2-Robotics-Practice로 돌아가기](https://github.com/2101080JUNGJINYOUNG/ROS2-Robotics-Practice/blob/main/README.md)  ·  📝 [실습 문제 풀어보기](./문제.md)
+> ⬆ [ROS2-Robotics-Practice로 돌아가기](https://github.com/2101080JUNGJINYOUNG/ROS2-Robotics-Practice)  ·  📝 [실습 문제 풀어보기](./문제.md)
 
 ROS2의 C++ 패키지는 내부적으로 전부 CMake로 빌드됩니다. 이 챕터에서 CMake의 동작 원리를 확실히 잡아두면, 18\~20장 이후 모든 실습 폴더의 `CMakeLists.txt`를 스스로 읽고 수정할 수 있게 됩니다.
 
@@ -99,4 +99,4 @@ end
 
 ---
 
-⬆ [ROS2-Robotics-Practice로 돌아가기](https://github.com/2101080JUNGJINYOUNG/ROS2-Robotics-Practice/blob/main/README.md)
+⬆ [ROS2-Robotics-Practice로 돌아가기](https://github.com/2101080JUNGJINYOUNG/ROS2-Robotics-Practice)  ·  📝 [실습 문제 풀어보기](./문제.md)  ·  ➡ [다음 장: 13장. ROS2 파일시스템](../13_ROS2파일시스템/README.md)
