@@ -1,6 +1,6 @@
 # 11장. CMake 사용법
 
-⬆ [ROS2-Robotics-Practice로 돌아가기](../)  ·  📘 [공부하기](../공부하기/11_CMake사용법/)
+⬆ [ROS2-Robotics-Practice로 돌아가기](../README.md)  ·  📘 [공부하기](../공부하기/11_CMake사용법/README.md)
 
 C++ 프로젝트의 빌드 시스템인 CMake의 동작 원리를 익히고, 직접 프로젝트를 구성해 빌드까지 해본 실습입니다.
 
