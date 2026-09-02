@@ -20,6 +20,4 @@
 
 ## 폴더 구조
 
-- [rclcpp/](./rclcpp/), [rclcpp2/](./rclcpp2/), [rclcpp3/](./rclcpp3/) — 각 프로젝트 폴더에 소스 코드와 `CMakeLists.txt` 포함
-
-> 원본 README에는 실행 결과 스크린샷이 포함되어 있었으나, 이미지가 다른 GitHub 계정(`user-attachments`)에 업로드되어 있어 이 저장소로 직접 가져오지 못했습니다. 코드와 텍스트 설명은 모두 그대로 보존했습니다.
+- [rclcpp/](./rclcpp/), [rclcpp2/](./rclcpp2/), [rclcpp3/](./rclcpp3/) — 각 프로젝트 폴더에 소스 코드와 `CMakeLists.txt` 포함, 각 project 폴더의 `images/`에 실행 결과 스크린샷 포함
