@@ -1,6 +1,6 @@
 # 24장. ROS2 + Dynamixel(다이내믹셀) 제어 — 공부하기
 
-> 🏠 [메인 저장소로 돌아가기](https://github.com/2101080JUNGJINYOUNG/ROS2-Robotics-Practice)
+> 🏠 [메인 저장소로 돌아가기](https://github.com/2101080JUNGJINYOUNG/ROS2-Robotics-Practice)  ·  📝 [실습 문제 풀어보기](./문제.md)
 
 22장에서 배운 Dynamixel 모터를 실제로 ROS2 노드로 제어하는 실습입니다. 18~20장(rclcpp 기본 문법)을 이해했다는 전제로 진행되며, 그 지식이 "실제 하드웨어 제어"에 어떻게 응용되는지가 핵심입니다.
 
@@ -21,9 +21,9 @@
 ## 2. 제어 테이블(Control Table) 주소
 
 ```cpp
-#define ADDR_MX_TORQUE_ENABLE    24   // MX 시리즈: 토크 On/Off 스위치 주소 (1을 쓰면 켜짐, 0을 쓰면 꺼짐)
-#define ADDR_MX_GOAL_POSITION    30   // MX 시리즈: 목표 위치(각도) 값을 쓰는 주소
-#define ADDR_XL_GOAL_VELOCITY    104  // XL 시리즈: 목표 속도 값을 쓰는 주소
+#define ADDR_MX_TORQUE_ENABLE 24 // MX 시리즈: 토크 On/Off 스위치 주소 (1을 쓰면 켜짐, 0을 쓰면 꺼짐)
+#define ADDR_MX_GOAL_POSITION 30 // MX 시리즈: 목표 위치(각도) 값을 쓰는 주소
+#define ADDR_XL_GOAL_VELOCITY 104 // XL 시리즈: 목표 속도 값을 쓰는 주소
 ```
 
 Dynamixel 모터 내부에는 "몇 번 주소에 어떤 값을 쓰면 어떤 동작을 한다"는 규격(제어 테이블)이 정해져 있습니다.
@@ -54,37 +54,37 @@ Dynamixel은 여러 동작 모드를 지원합니다.
 4개의 노드가 서로 다른 컴퓨터(Jetson Nano ↔ 사용자 PC/우분투)에서 실행되며 협력합니다. 18~20장에서 배운 pub/sub 분리 패턴이 실제 로봇 제어로 확장된 형태입니다.
 
 ```
-[우분투 PC]                                [Jetson Nano]
-키보드 입력(f/b/l/r/s)                          카메라
-    │ pub.cpp                                    │ jetson/pub.cpp (GStreamer로 캡처)
-    ▼ topic_dxlpub (속도값 발행)                   ▼ CompressedImage 토픽 발행
-                    ──── 네트워크(같은 대역, 23장 참고) ────
-    ▲ sub.cpp (영상 구독, 화면 표시/녹화)            ▼
-    │                                        jetson/sub.cpp
-[영상 확인용, 모터 제어와는 무관]              (속도 토픽 구독 → dxl.setVelocity() 호출)
-                                                    │
-                                              실제 Dynamixel 모터 구동
+[우분투 PC]                          [Jetson Nano]
+키보드 입력(f/b/l/r/s)                 카메라
+   │ pub.cpp                          │ jetson/pub.cpp (GStreamer로 캡처)
+   ▼ topic_dxlpub (속도값 발행)         ▼ CompressedImage 토픽 발행
+   ──── 네트워크(같은 대역, 23장 참고) ────
+   ▲ sub.cpp (영상 구독, 화면 표시/녹화) ▼
+   │                                  jetson/sub.cpp
+[영상 확인용, 모터 제어와는 무관]         (속도 토픽 구독 → dxl.setVelocity() 호출)
+                                       │
+                                실제 Dynamixel 모터 구동
 ```
 
 아래 다이어그램은 위 구조를 두 개의 독립된 흐름(모터 구동 경로 / 카메라 영상 경로)으로 나누어 보여줍니다.
 
 ```mermaid
 graph LR
-    subgraph PC["우분투 PC"]
-        KB["키보드 입력<br/>f/b/l/r/s"] --> PUB["pub.cpp<br/>(가감속 로직 적용)"]
-        SUB["sub.cpp<br/>화면 표시 · save.mp4 녹화"]
-    end
-    subgraph JETSON["Jetson Nano"]
-        CAM["카메라"] --> JPUB["jetson/pub.cpp<br/>(GStreamer로 캡처)"]
-        JSUB["jetson/sub.cpp"] --> DXL["dxl.setVelocity()<br/>실제 모터 구동"]
-    end
-    PUB -- "topic_dxlpub<br/>(Vector3 속도값)" --> JSUB
-    JPUB -- "CompressedImage 토픽" --> SUB
+subgraph PC["우분투 PC"]
+KB["키보드 입력<br/>f/b/l/r/s"] --> PUB["pub.cpp<br/>(가감속 로직 적용)"]
+SUB["sub.cpp<br/>화면 표시 · save.mp4 녹화"]
+end
+subgraph JETSON["Jetson Nano"]
+CAM["카메라"] --> JPUB["jetson/pub.cpp<br/>(GStreamer로 캡처)"]
+JSUB["jetson/sub.cpp"] --> DXL["dxl.setVelocity()<br/>실제 모터 구동"]
+end
+PUB -- "topic_dxlpub<br/>(Vector3 속도값)" --> JSUB
+JPUB -- "CompressedImage 토픽" --> SUB
 
-    style PUB fill:#f96,stroke:#333
-    style JSUB fill:#f96,stroke:#333
-    style JPUB fill:#69f,stroke:#333
-    style SUB fill:#69f,stroke:#333
+style PUB fill:#f96,stroke:#333
+style JSUB fill:#f96,stroke:#333
+style JPUB fill:#69f,stroke:#333
+style SUB fill:#69f,stroke:#333
 ```
 
 핵심은 **모터를 실제로 구동시키는 경로**(주황색)와 **카메라 영상 경로**(파란색)가 완전히 분리된 두 개의 흐름이라는 점입니다.
@@ -103,6 +103,7 @@ graph LR
 - 위치 제어와 속도 제어 중, 바퀴를 계속 굴리는 로봇에는 어느 쪽이 적합한가?
 - 다이내믹셀2 실습에서 카메라 영상 경로와 모터 구동 경로가 왜 서로 분리되어 있는가?
 - `우분투/sub.cpp`가 멈추면(화면 창을 닫으면) 실제로 로봇의 주행에 영향이 있는가, 없는가? 그 이유는?
+
 ---
 
 🏠 [메인 저장소로 돌아가기](https://github.com/2101080JUNGJINYOUNG/ROS2-Robotics-Practice)
