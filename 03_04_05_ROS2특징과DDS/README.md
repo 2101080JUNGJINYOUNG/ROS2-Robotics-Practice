@@ -1,6 +1,6 @@
 # 3~5장. ROS2의 특징, DDS, 패키지와 노드
 
-⬆ [ROS2-Robotics-Practice로 돌아가기](../README.md)  ·  📘 [공부하기](../공부하기/03_04_05_ROS2특징과DDS/README.md)
+⬆ [ROS2-Robotics-Practice로 돌아가기](https://github.com/2101080JUNGJINYOUNG/ROS2-Robotics-Practice)  ·  📘 [공부하기](../공부하기/03_04_05_ROS2특징과DDS/README.md)
 
 세 개 챕터를 묶은 과제로, ROS1과 ROS2의 구조적 차이, DDS 미들웨어, 그리고 실제 turtlesim 패키지 실습을 다룹니다.
 
