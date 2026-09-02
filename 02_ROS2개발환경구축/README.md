@@ -1,6 +1,6 @@
 # 2장. ROS2 개발환경 구축
 
-⬆ [ROS2-Robotics-Practice로 돌아가기](../)  ·  📘 [공부하기](../공부하기/02_ROS2개발환경구축/)
+⬆ [ROS2-Robotics-Practice로 돌아가기](../README.md)  ·  📘 [공부하기](../공부하기/02_ROS2개발환경구축/README.md)
 
 ROS2(Foxy) 개발 환경을 실제로 구성하고 동작을 확인한 실습입니다.
 
