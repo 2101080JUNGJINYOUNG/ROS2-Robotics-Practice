@@ -7,6 +7,7 @@
 ## 목차
 
 - [1. 전체 구조](#1-전체-구조-pubpub과-subsub)
+- [1-1. 클래스 상속형 노드 패턴](#1-1-클래스-상속형-노드-패턴-campubnode)
 - [2. 왜 CompressedImage를 쓰는가](#2-왜-compressedimage를-쓰는가)
 - [3. 라인 검출 알고리즘 단계별 이해](#3-라인-검출-알고리즘-단계별-이해-visioncpp)
 - [4. 데모 영상과 연결해서 보기](#4-데모-영상과-연결해서-보기)
@@ -22,6 +23,34 @@
 - **`subsub`**: 압축 이미지 토픽을 구독해 실제 라인 검출 알고리즘을 수행합니다.
 
 18\~20장에서 배운 "퍼블리셔/구독자 완전 분리" 패턴이 여기서는 "카메라 담당 노드"와 "영상 처리 담당 노드"로 나뉜 것입니다. 이렇게 분리해두면 카메라 노드는 그대로 두고 영상 처리 알고리즘만 따로 수정·재실행할 수 있습니다.
+
+## 1-1. 클래스 상속형 노드 패턴 (`CamPubNode`)
+
+18~24장까지는 전역 함수를 만들고 `std::bind(함수, ...)`로 노드 객체를 감싸는 방식(자유 함수 + `std::bind`)으로 노드를 작성했습니다. `pubpub`(`cam_pub_node.cpp`)부터는 다른 방식이 등장합니다 — **클래스가 `rclcpp::Node`를 상속**하는 패턴입니다.
+
+```cpp
+// cam_pub_node.hpp (개념 정리용 축약)
+class CamPubNode : public rclcpp::Node   // rclcpp::Node를 상속받는 클래스
+{
+public:
+    CamPubNode(const std::string & node_name,
+               const std::string & topic_name,
+               const std::string & video_source);
+private:
+    void publish_frame();   // 멤버 함수 콜백
+    rclcpp::TimerBase::SharedPtr timer_;
+    rclcpp::Publisher<sensor_msgs::msg::CompressedImage>::SharedPtr publisher_;
+    cv::VideoCapture cap_;
+};
+```
+
+두 방식의 차이:
+
+- **자유 함수 + `std::bind` (18~24장)**: `auto node = std::make_shared<rclcpp::Node>("이름");`처럼 `rclcpp::Node`를 직접 생성한 뒤, 콜백은 별도의 전역 함수로 만들고 `std::bind(callback, node, ...)`처럼 필요한 값을 묶어서 등록합니다. 노드와 콜백 로직이 분리되어 있습니다.
+- **클래스 상속(25장)**: `class CamPubNode : public rclcpp::Node`처럼 클래스 자체가 노드입니다. 생성자 안에서 `this`를 이용해 `create_wall_timer`나 `create_publisher`를 호출하고, 콜백도 그 클래스의 멤버 함수로 만들어 `std::bind(&CamPubNode::publish_frame, this)`처럼 **멤버 함수 포인터 + `this`**를 바인딩합니다. 노드가 가져야 할 상태(`cap_`, `publisher_` 등)를 멤버 변수로 자연스럽게 들고 다닐 수 있어, 카메라 핸들처럼 여러 개의 상태를 유지해야 하는 노드에 적합합니다.
+
+> [!NOTE]
+> `std::bind(&클래스::멤버함수, 객체포인터, 인자...)` 형태는 15~17장에서 배운 `std::bind`의 연장선입니다. 차이는 첫 번째 인자가 "멤버 함수 포인터"이고, 그 다음에 반드시 "그 함수를 호출할 객체(주로 `this`)"가 와야 한다는 점뿐입니다.
 
 ## 2. 왜 `CompressedImage`를 쓰는가
 
