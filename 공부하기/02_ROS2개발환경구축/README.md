@@ -1,6 +1,6 @@
 # 02장. ROS2 개발환경 구축 — 공부하기
 
-> 🏠 [메인 저장소로 돌아가기](https://github.com/2101080JUNGJINYOUNG/ROS2-Robotics-Practice)
+> 🏠 [메인 저장소로 돌아가기](https://github.com/2101080JUNGJINYOUNG/ROS2-Robotics-Practice)  ·  📝 [실습 문제 풀어보기](./문제.md)
 
 이 챕터는 ROS2(Foxy)를 실제로 설치하고 처음 동작을 확인하는 실습입니다. 명령어를 따라 치는 것도 중요하지만, 왜 이 명령어가 필요한지 알아야 나중에 문제가 생겼을 때 스스로 해결할 수 있습니다.
 
@@ -51,11 +51,11 @@ ros2 run demo_nodes_py listener
 
 ```mermaid
 graph LR
-    A["talker 노드 (C++)"] -- publish --> T(("/chatter 토픽"))
-    T -- subscribe --> B["listener 노드 (Python)"]
-    subgraph MW["DDS 미들웨어 (언어 무관 공통 인터페이스)"]
-        T
-    end
+A["talker 노드 (C++)"] -- publish --> T(("/chatter 토픽"))
+T -- subscribe --> B["listener 노드 (Python)"]
+subgraph MW["DDS 미들웨어 (언어 무관 공통 인터페이스)"]
+T
+end
 ```
 
 ## 4. 워크스페이스란
@@ -98,6 +98,7 @@ colcon build --symlink-install
 - `ROS_DOMAIN_ID`가 왜 필요한지, 어떤 상황에서 문제를 해결해주는지 설명할 수 있는가?
 
 이 정도를 스스로 설명할 수 있으면 2장 실습을 그대로 재현하고 이해할 수 있습니다.
+
 ---
 
 🏠 [메인 저장소로 돌아가기](https://github.com/2101080JUNGJINYOUNG/ROS2-Robotics-Practice)
