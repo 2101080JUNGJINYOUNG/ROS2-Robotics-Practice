@@ -1,6 +1,6 @@
 # 03~05장. ROS2의 특징, DDS, 패키지와 노드 — 공부하기
 
-> 🏠 [메인 저장소로 돌아가기](https://github.com/2101080JUNGJINYOUNG/ROS2-Robotics-Practice)
+> 🏠 [메인 저장소로 돌아가기](https://github.com/2101080JUNGJINYOUNG/ROS2-Robotics-Practice)  ·  📝 [실습 문제 풀어보기](./문제.md)
 
 세 챕터를 묶은 과제라서 배경지식도 세 갈래로 나눠서 정리합니다. 이 문서 하나로 3장(ROS2 특징), 4장(DDS), 5장(turtlesim 실습)을 모두 준비할 수 있습니다.
 
@@ -20,17 +20,17 @@
 
 ```mermaid
 graph TD
-    subgraph ROS1["ROS1: Master 중앙집중형"]
-        M["roscore (Master)"]
-        N1["노드 1"] --- M
-        N2["노드 2"] --- M
-        M --- N3["노드 3"]
-    end
-    subgraph ROS2["ROS2: DDS 분산형(Dynamic Discovery)"]
-        P1["노드 1"] <--> P2["노드 2"]
-        P2 <--> P3["노드 3"]
-        P1 <--> P3
-    end
+subgraph ROS1["ROS1: Master 중앙집중형"]
+M["roscore (Master)"]
+N1["노드 1"] --- M
+N2["노드 2"] --- M
+M --- N3["노드 3"]
+end
+subgraph ROS2["ROS2: DDS 분산형(Dynamic Discovery)"]
+P1["노드 1"] <--> P2["노드 2"]
+P2 <--> P3["노드 3"]
+P1 <--> P3
+end
 ```
 
 > [!WARNING]
@@ -57,18 +57,18 @@ DDS는 RTPS(Real-Time Publish-Subscribe) 프로토콜 기반으로 동작하는 
 
 ```mermaid
 graph LR
-    Pub["퍼블리셔 노드"] -- "1. 발행(publish)" --> Topic(("토픽"))
-    Topic -- "2. 전달" --> Sub["서브스크라이버 노드"]
-    subgraph DDS["DDS 미들웨어 (RTPS 프로토콜, 브로커 없는 P2P)"]
-        Topic
-    end
-    Pub -. "3. 동적 검색으로 서로 발견" .-> Sub
+Pub["퍼블리셔 노드"] -- "1. 발행(publish)" --> Topic(("토픽"))
+Topic -- "2. 전달" --> Sub["서브스크라이버 노드"]
+subgraph DDS["DDS 미들웨어 (RTPS 프로토콜, 브로커 없는 P2P)"]
+Topic
+end
+Pub -. "3. 동적 검색으로 서로 발견" .-> Sub
 ```
 
 - **QoS(Quality of Service)**: 통신의 신뢰성, 지연, 버퍼 크기 등을 세밀하게 조절하는 설정.
-  - `best_effort` — 전달 보장 안 함, 대신 빠름 (예: 카메라 영상처럼 가끔 유실돼도 최신 데이터가 중요한 경우)
-  - `reliable` — 전달 보장 (예: 센서 값처럼 무조건 다 받아야 하는 경우)
-  - 이 개념은 18~20장 코드의 `rclcpp::QoS(rclcpp::KeepLast(10))`에서 실제로 등장합니다.
+- `best_effort` — 전달 보장 안 함, 대신 빠름 (예: 카메라 영상처럼 가끔 유실돼도 최신 데이터가 중요한 경우)
+- `reliable` — 전달 보장 (예: 센서 값처럼 무조건 다 받아야 하는 경우)
+- 이 개념은 18~20장 코드의 `rclcpp::QoS(rclcpp::KeepLast(10))`에서 실제로 등장합니다.
 
 > [!NOTE]
 > QoS는 퍼블리셔와 서브스크라이버 양쪽에 설정하는데, 서로 호환되지 않는 QoS(예: 한쪽은 `reliable`, 한쪽은 `best_effort`)를 쓰면 연결이 아예 되지 않을 수 있습니다. 통신이 안 될 때 QoS 불일치도 의심해볼 만한 원인입니다.
@@ -78,29 +78,29 @@ graph LR
 turtlesim은 ROS2에 기본 포함된 거북이 시뮬레이터로, 토픽/노드 개념을 눈으로 직접 보기 위한 교육용 도구입니다.
 
 ```bash
-ros2 pkg list                          # 설치된 전체 패키지 목록 출력
-ros2 pkg executables turtlesim         # turtlesim 패키지 안의 실행 파일 목록 출력
-ros2 run turtlesim turtlesim_node      # 거북이 시뮬레이터 창 실행 (turtlesim 패키지의 turtlesim_node 실행 파일 구동)
-ros2 run turtlesim turtle_teleop_key   # 키보드로 거북이를 조종하는 노드 실행 (별도 터미널에서 실행)
+ros2 pkg list # 설치된 전체 패키지 목록 출력
+ros2 pkg executables turtlesim # turtlesim 패키지 안의 실행 파일 목록 출력
+ros2 run turtlesim turtlesim_node # 거북이 시뮬레이터 창 실행 (turtlesim 패키지의 turtlesim_node 실행 파일 구동)
+ros2 run turtlesim turtle_teleop_key # 키보드로 거북이를 조종하는 노드 실행 (별도 터미널에서 실행)
 ```
 
 `turtlesim_node`와 `turtle_teleop_key`는 서로 다른 두 개의 노드입니다. `turtle_teleop_key`가 방향키 입력을 받아 속도 값을 토픽으로 발행하면, `turtlesim_node`가 이를 구독해 화면 속 거북이를 움직입니다. "입력을 처리하는 노드"와 "실제 동작(시각화)을 하는 노드"가 분리되어 있다는 것이 핵심이며, 이 구조는 24장(다이내믹셀), 25장(라인검출)에서도 반복됩니다.
 
 ```mermaid
 graph LR
-    T["turtle_teleop_key 노드\n(키보드 입력 처리)"] -- "/turtle1/cmd_vel 토픽 발행" --> C(("cmd_vel 토픽"))
-    C -- 구독 --> S["turtlesim_node 노드\n(거북이 시각화)"]
-    subgraph DDS["DDS 미들웨어"]
-        C
-    end
+T["turtle_teleop_key 노드\n(키보드 입력 처리)"] -- "/turtle1/cmd_vel 토픽 발행" --> C(("cmd_vel 토픽"))
+C -- 구독 --> S["turtlesim_node 노드\n(거북이 시각화)"]
+subgraph DDS["DDS 미들웨어"]
+C
+end
 ```
 
 ```bash
-ros2 topic list      # 현재 실행 중인 토픽 이름 목록 출력
-ros2 service list    # 현재 실행 중인 서비스 목록 출력
-ros2 action list     # 현재 실행 중인 액션 목록 출력
-ros2 node list       # 현재 실행 중인 노드 목록 출력
-ros2 node info /turtlesim   # 특정 노드(/turtlesim)가 가진 토픽/서비스/액션 상세 정보 조회
+ros2 topic list # 현재 실행 중인 토픽 이름 목록 출력
+ros2 service list # 현재 실행 중인 서비스 목록 출력
+ros2 action list # 현재 실행 중인 액션 목록 출력
+ros2 node list # 현재 실행 중인 노드 목록 출력
+ros2 node info /turtlesim # 특정 노드(/turtlesim)가 가진 토픽/서비스/액션 상세 정보 조회
 ```
 
 `rqt_graph`는 현재 실행 중인 노드와 토픽의 연결 관계를 그래프로 보여주는 시각화 도구입니다. 실행하면 `/teleop_turtle` → `/turtlesim` 화살표가 나오는데, 이 화살표가 토픽을 통한 pub/sub 연결입니다.
@@ -115,6 +115,7 @@ ros2 node info /turtlesim   # 특정 노드(/turtlesim)가 가진 토픽/서비�
 - ROS1과 ROS2 중 어느 쪽이 중앙 서버(Master) 없이 동작하는가, 그 이유는?
 - DDS가 브로커 방식(MQTT)과 다른 점은 무엇인가?
 - `turtlesim_node`와 `turtle_teleop_key`가 왜 별도의 노드로 분리되어 있는가?
+
 ---
 
 🏠 [메인 저장소로 돌아가기](https://github.com/2101080JUNGJINYOUNG/ROS2-Robotics-Practice)
