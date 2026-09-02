@@ -1,6 +1,6 @@
 # 13장. ROS2 파일시스템 — 공부하기
 
-> 🏠 [메인 저장소로 돌아가기](https://github.com/2101080JUNGJINYOUNG/ROS2-Robotics-Practice)
+> 🏠 [메인 저장소로 돌아가기](https://github.com/2101080JUNGJINYOUNG/ROS2-Robotics-Practice)  ·  📝 [실습 문제 풀어보기](./문제.md)
 
 ROS2 패키지를 실제로 만들고 빌드하면서 파일/폴더 구조를 익히는 실습입니다. 11장(CMake)의 지식을 ROS2 패키지 단위로 확장한다고 생각하면 됩니다.
 
@@ -24,10 +24,10 @@ ROS2 패키지를 실제로 만들고 빌드하면서 파일/폴더 구조를 �
 
 ```mermaid
 graph TD
-    Colcon["colcon (빌드 툴)<br/>워크스페이스 전체를 의존성 순서대로 빌드"]
-    Colcon --> PkgA["패키지 A<br/>(ament_cmake)"]
-    Colcon --> PkgB["패키지 B<br/>(ament_python)"]
-    PkgA -.->|"A가 B에 의존하면<br/>B를 먼저 빌드"| PkgB
+Colcon["colcon (빌드 툴)<br/>워크스페이스 전체를 의존성 순서대로 빌드"]
+Colcon --> PkgA["패키지 A<br/>(ament_cmake)"]
+Colcon --> PkgB["패키지 B<br/>(ament_python)"]
+PkgA -.->|"A가 B에 의존하면<br/>B를 먼저 빌드"| PkgB
 ```
 
 ## 2. 패키지 만들기: `ros2 pkg create`
@@ -51,10 +51,10 @@ ros2 pkg create first_pkg --build-type ament_cmake --dependencies rclcpp std_msg
 
 ```mermaid
 graph TD
-    Root["first_pkg/"] --> CML["CMakeLists.txt<br/>(CMake 설정 파일)"]
-    Root --> PXML["package.xml<br/>(이름·버전·의존성 목록)"]
-    Root --> Inc["include/<br/>(헤더 파일 .hpp)"]
-    Root --> Src["src/<br/>(소스 코드 .cpp)"]
+Root["first_pkg/"] --> CML["CMakeLists.txt<br/>(CMake 설정 파일)"]
+Root --> PXML["package.xml<br/>(이름·버전·의존성 목록)"]
+Root --> Inc["include/<br/>(헤더 파일 .hpp)"]
+Root --> Src["src/<br/>(소스 코드 .cpp)"]
 ```
 
 - **`CMakeLists.txt`**: 11장에서 배운 CMake 설정 파일 (`find_package`, `add_executable`을 여기에 직접 추가)
@@ -95,6 +95,7 @@ colcon build --symlink-install --packages-select first_pkg
 - `ros2 pkg create`는 어느 폴더 안에서 실행해야 하는가, 왜 그런가?
 - `build/`, `install/`, `log/`를 전부 지워도 안전한 이유는 무엇인가?
 - `package.xml`과 `CMakeLists.txt`는 각각 무슨 역할을 하는가?
+
 ---
 
 🏠 [메인 저장소로 돌아가기](https://github.com/2101080JUNGJINYOUNG/ROS2-Robotics-Practice)
