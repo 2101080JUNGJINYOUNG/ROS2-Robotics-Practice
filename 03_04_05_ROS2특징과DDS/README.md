@@ -21,7 +21,7 @@
 - `ros2 topic/service/action/node list`로 현재 실행 중인 통신 자원 확인
 - `rqt_graph`로 `/turtlesim` ↔ `/teleop_turtle` 노드-토픽 연결을 시각적으로 확인
 - `ros2 node info <노드명>`으로 각 노드의 Publisher/Subscriber/Service/Action 정보 조회
-- 화살표 키와 문자 키(G·B·V·C·D·E·R·T)를 동시에 입력해 거북이로 8자 그리기 실습
+- 화살표 키(전후진·좌우회전)와 회전용 문자 키(G/B/V/C/D/E/R/T) 중 2개를 동시에 눌러 거북이로 8자 그리기 실습
 
 ## 자료
 
