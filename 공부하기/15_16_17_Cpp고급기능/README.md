@@ -1,6 +1,6 @@
 # 15~17장. C++ 고급 기능 — 공부하기
 
-> 🏠 [메인 저장소로 돌아가기](https://github.com/2101080JUNGJINYOUNG/ROS2-Robotics-Practice)
+> 🏠 [메인 저장소로 돌아가기](https://github.com/2101080JUNGJINYOUNG/ROS2-Robotics-Practice)  ·  📝 [실습 문제 풀어보기](./문제.md)
 
 18~20장(rclcpp) 코드를 보면 콜백 함수가 람다식, `std::bind`, 스마트 포인터로 가득 차 있습니다. 이 챕터의 문법을 미리 익혀두지 않으면 rclcpp 코드가 왜 이렇게 복잡한지 이해가 안 됩니다. 반대로 여기를 잡으면 18~20장, 24~25장 코드가 술술 읽힙니다.
 
@@ -16,24 +16,24 @@
 **일반 함수 vs 람다식**: 일반 함수는 이름을 붙여 미리 정의해두고 나중에 그 이름으로 호출합니다. 람다식(lambda expression)은 이름 없이 그 자리에서 즉석으로 만드는 함수입니다.
 
 ```cpp
-auto add = [](int a, int b) { return a + b; };   // 이름 없는 함수(람다식)를 만들어 add 변수에 저장
-int result = add(3, 4);                           // add를 일반 함수처럼 호출 -> result는 7
+auto add = [](int a, int b) { return a + b; }; // 이름 없는 함수(람다식)를 만들어 add 변수에 저장
+int result = add(3, 4); // add를 일반 함수처럼 호출 -> result는 7
 ```
 
 람다식의 큰 장점은 **캡처(capture)** 입니다. 대괄호 `[]` 안에 캡처할 변수를 적으면, 람다 밖 변수를 람다 안에서 그대로 쓸 수 있습니다.
 
 ```cpp
 int base = 10;
-auto addBase = [base](int x) { return x + base; };  // base를 값으로 캡처 (람다 안에서는 복사본)
+auto addBase = [base](int x) { return x + base; }; // base를 값으로 캡처 (람다 안에서는 복사본)
 auto addBaseRef = [&base](int x) { return x + base; }; // base를 참조로 캡처 (원본 base를 그대로 참조)
 ```
 
 **`std::function`**: 일반 함수, 함수 객체, 람다식은 모두 "호출 가능한 것(callable)"이지만 타입이 서로 다릅니다. `std::function`은 이 서로 다른 형태를 하나의 통일된 타입으로 담을 수 있는 "함수를 담는 상자"입니다.
 
 ```cpp
-std::function<int(int, int)> calculator;           // int, int를 받아 int를 반환하는 함수를 담을 상자 선언
-calculator = [](int a, int b) { return a + b; };   // 덧셈 람다를 상자에 대입
-calculator = [](int a, int b) { return a - b; };   // 뺄셈 람다로 교체 (같은 상자, 다른 내용물)
+std::function<int(int, int)> calculator; // int, int를 받아 int를 반환하는 함수를 담을 상자 선언
+calculator = [](int a, int b) { return a + b; }; // 덧셈 람다를 상자에 대입
+calculator = [](int a, int b) { return a - b; }; // 뺄셈 람다로 교체 (같은 상자, 다른 내용물)
 ```
 
 > [!NOTE]
@@ -43,9 +43,9 @@ rclcpp의 콜백 등록(`create_subscription`, `create_wall_timer`)은 내부적
 
 ```mermaid
 graph LR
-    L["람다식 / 함수 객체 / 일반 함수"] --> F["std::function<br/>(통일된 콜백 타입)"]
-    F --> Sub["node->create_subscription(..., callback)"]
-    F --> Timer["node->create_wall_timer(..., callback)"]
+L["람다식 / 함수 객체 / 일반 함수"] --> F["std::function<br/>(통일된 콜백 타입)"]
+F --> Sub["node->create_subscription(..., callback)"]
+F --> Timer["node->create_wall_timer(..., callback)"]
 ```
 
 ## 16장 — std::bind와 시간 리터럴
@@ -53,7 +53,7 @@ graph LR
 **`std::bind`**: 어떤 함수의 일부 인자를 미리 고정해서, 인자가 더 적은 새로운 함수를 만들어주는 도구입니다.
 
 ```cpp
-bool isGreaterThan(int value, int threshold) { return value > threshold; }  // 인자 2개짜리 원래 함수
+bool isGreaterThan(int value, int threshold) { return value > threshold; } // 인자 2개짜리 원래 함수
 
 // value 자리는 나중에 채워지도록(_1) 남겨두고, threshold는 50으로 미리 고정
 auto isGreaterThan50 = std::bind(isGreaterThan, std::placeholders::_1, 50);
@@ -74,16 +74,16 @@ std::function<void()> fn = std::bind(callback, node, mypub);
 
 ```mermaid
 graph LR
-    Orig["원래 콜백 함수<br/>callback(node, mypub)"] -->|"std::bind로<br/>node, mypub 고정"| Bound["fn() (인자 없음)"]
-    Bound -->|"등록"| Timer["create_wall_timer(주기, fn)"]
+Orig["원래 콜백 함수<br/>callback(node, mypub)"] -->|"std::bind로<br/>node, mypub 고정"| Bound["fn() (인자 없음)"]
+Bound -->|"등록"| Timer["create_wall_timer(주기, fn)"]
 ```
 
 **시간 리터럴**: `using namespace std::chrono_literals;`를 선언하면 `100ms`, `2s`처럼 숫자 뒤에 단위를 붙여 시간을 표현할 수 있습니다.
 
 ```cpp
-using namespace std::chrono_literals;             // ms, s 같은 시간 단위 리터럴 사용 선언
-auto timer = node->create_wall_timer(100ms, callback);  // 100밀리초마다 callback 호출하는 타이머 생성
-auto total = 1s + 250ms;  // 시간 리터럴끼리 연산 (1.25초)
+using namespace std::chrono_literals; // ms, s 같은 시간 단위 리터럴 사용 선언
+auto timer = node->create_wall_timer(100ms, callback); // 100밀리초마다 callback 호출하는 타이머 생성
+auto total = 1s + 250ms; // 시간 리터럴끼리 연산 (1.25초)
 ```
 
 이 문법은 18~20장의 `create_wall_timer(100ms, ...)`처럼 타이머 주기 지정에 그대로 쓰입니다.
@@ -99,17 +99,17 @@ auto total = 1s + 250ms;  // 시간 리터럴끼리 연산 (1.25초)
 > `unique_ptr`는 복사가 금지되어 있습니다 — 소유자가 둘이 될 수 없다는 것이 핵심 규칙이며, 복사를 시도하면 컴파일 에러가 납니다. 소유권을 넘기고 싶으면 반드시 `std::move`로 "이동"해야 합니다.
 
 ```cpp
-std::unique_ptr<CTest> ptr1 = std::make_unique<CTest>();  // CTest 객체를 힙에 생성, ptr1이 유일한 소유자
-std::unique_ptr<CTest> ptr2 = std::move(ptr1);  // 소유권을 ptr2로 이동, ptr1은 비어있음(nullptr)
+std::unique_ptr<CTest> ptr1 = std::make_unique<CTest>(); // CTest 객체를 힙에 생성, ptr1이 유일한 소유자
+std::unique_ptr<CTest> ptr2 = std::move(ptr1); // 소유권을 ptr2로 이동, ptr1은 비어있음(nullptr)
 ```
 
 **`shared_ptr`**: 여러 곳에서 동시에 소유할 수 있는 스마트 포인터로, 내부적으로 참조 카운트(reference count)를 유지합니다. 카운트가 0이 되는 순간 객체의 소멸자가 호출되고 메모리가 해제됩니다.
 
 ```cpp
-auto p1 = std::make_shared<CTest>();   // CTest 객체 생성, 참조 카운트 1
+auto p1 = std::make_shared<CTest>(); // CTest 객체 생성, 참조 카운트 1
 {
-    auto p2 = p1;                       // p1과 같은 객체를 가리킴, 참조 카운트 2
-}                                        // 블록을 벗어나며 p2 소멸 -> 참조 카운트 1
+auto p2 = p1; // p1과 같은 객체를 가리킴, 참조 카운트 2
+} // 블록을 벗어나며 p2 소멸 -> 참조 카운트 1
 // p1도 소멸하면 참조 카운트 0 -> 소멸자 호출, 메모리 해제
 ```
 
@@ -117,11 +117,11 @@ rclcpp에서 노드를 만들 때 항상 `std::make_shared<rclcpp::Node>("이름
 
 ```mermaid
 graph TD
-    Node["rclcpp::Node<br/>(shared_ptr, 참조 카운트)"]
-    Node --> Pub["Publisher가 참조<br/>(카운트 +1)"]
-    Node --> Timer["Timer 콜백이 참조<br/>(카운트 +1)"]
-    Node --> Sub["Subscription이 참조<br/>(카운트 +1)"]
-    Pub -.->|"더 이상 아무도<br/>참조 안 하면"| Free["카운트 0 -> 자동 소멸"]
+Node["rclcpp::Node<br/>(shared_ptr, 참조 카운트)"]
+Node --> Pub["Publisher가 참조<br/>(카운트 +1)"]
+Node --> Timer["Timer 콜백이 참조<br/>(카운트 +1)"]
+Node --> Sub["Subscription이 참조<br/>(카운트 +1)"]
+Pub -.->|"더 이상 아무도<br/>참조 안 하면"| Free["카운트 0 -> 자동 소멸"]
 ```
 
 ## 스스로 확인하는 질문
@@ -131,6 +131,7 @@ graph TD
 - `std::bind`가 rclcpp 콜백 등록에서 실제로 어떤 문제를 해결해주는가?
 - `unique_ptr`와 `shared_ptr`의 차이(소유자 수)를 설명할 수 있는가?
 - rclcpp 노드가 왜 항상 `shared_ptr`로 관리되는지 설명할 수 있는가?
+
 ---
 
 🏠 [메인 저장소로 돌아가기](https://github.com/2101080JUNGJINYOUNG/ROS2-Robotics-Practice)
