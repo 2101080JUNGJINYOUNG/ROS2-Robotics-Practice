@@ -1,19 +1,18 @@
 # 25장. ROS2 라인 검출 (Line Tracer)
 
+> 📘 **배경 지식 정리**: 이 실습과 관련된 개념 설명은 [공부하기 문서](../공부하기/25_ROS2라인검출/README.md)에서 확인할 수 있습니다.
+
+
 카메라 영상을 이용해 라인을 검출하고 그에 맞춰 주행하는 라인 트레이서 실습입니다. 영상을 ROS2 토픽으로 발행하는 `pubpub` 노드와, 그 영상을 받아 라인을 검출·처리하는 `subsub` 노드로 구성되어 있습니다.
 
-## pubpub/ — 영상 퍼블리셔
 
-- `cam_pub_node.hpp`/`.cpp`: OpenCV `VideoCapture`로 영상 소스(파일 또는 Jetson 카메라의 GStreamer 파이프라인)를 읽어 `sensor_msgs::msg::CompressedImage`로 약 30FPS(33ms 주기)에 맞춰 압축 발행하는 노드
-- 노드 이름, 토픽 이름, 영상 소스 경로를 모두 생성자 인자로 받아 재사용 가능하도록 설계
+## 실습 목록
 
-## subsub/ — 라인 검출/처리
-
-- `vision.hpp`/`.cpp`, `main.cpp`: `pubpub`이 발행한 압축 이미지 토픽을 구독해 라인 검출 로직을 수행하는 노드
-
-## liner_추가예제/ — 보조 예제
-
-- 별도의 `liner` 패키지(`pub.cpp`) — 라인 트레이싱 관련 보조 퍼블리셔 예제
+| 실습 | 내용 |
+|---|---|
+| [pubpub](./pubpub/) | 영상 퍼블리셔 — OpenCV VideoCapture로 영상 소스를 읽어 CompressedImage로 약 30FPS 압축 발행 |
+| [subsub](./subsub/) | 라인 검출/처리 — pubpub이 발행한 압축 이미지를 구독해 ROI 추출·이진화·라인 중심 검출 및 에러 계산 |
+| [liner_추가예제](./liner_추가예제/) | 보조 예제 — 별도 `liner` 패키지의 라인 트레이싱 보조 퍼블리셔 |
 
 ## 데모 영상
 
