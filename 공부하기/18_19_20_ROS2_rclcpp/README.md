@@ -1,6 +1,6 @@
 # 18\~20장. ROS2 rclcpp — 공부하기
 
-> ⬆ [ROS2-Robotics-Practice로 돌아가기](https://github.com/2101080JUNGJINYOUNG/ROS2-Robotics-Practice)  ·  📝 [실습 문제 풀어보기](./문제.md)
+> ⬆ [ROS2-Robotics-Practice로 돌아가기](https://github.com/2101080JUNGJINYOUNG/ROS2-Robotics-Practice)  ·  📚 [공부 목차](../README.md)  ·  📝 [실습 문제 풀어보기](./문제.md)
 
 이 챕터부터는 직접 퍼블리셔/서브스크라이버 노드를 C++로 작성합니다. 06장(토픽 개념), 10장(인터페이스), 13장(패키지 구조), 15\~17장(C++ 고급 문법)의 내용이 전부 여기서 실전 코드로 합쳐집니다.
 
@@ -161,4 +161,4 @@ int main(int argc, char* argv[])
 
 ---
 
-⬆ [ROS2-Robotics-Practice로 돌아가기](https://github.com/2101080JUNGJINYOUNG/ROS2-Robotics-Practice)  ·  📝 [실습 문제 풀어보기](./문제.md)  ·  ➡ [다음 장: 22장. 실습 로봇 소개](../22_실습로봇소개/README.md)
+⬆ [ROS2-Robotics-Practice로 돌아가기](https://github.com/2101080JUNGJINYOUNG/ROS2-Robotics-Practice)  ·  📚 [공부 목차](../README.md)  ·  📝 [실습 문제 풀어보기](./문제.md)  ·  ➡ [다음 장: 22장. 실습 로봇 소개](../22_실습로봇소개/README.md)
