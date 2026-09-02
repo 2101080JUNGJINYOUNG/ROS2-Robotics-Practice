@@ -1,6 +1,6 @@
 # 10장. ROS2 인터페이스
 
-⬆ [ROS2-Robotics-Practice로 돌아가기](../README.md)  ·  📘 [공부하기](../공부하기/10_ROS2인터페이스/README.md)
+⬆ [ROS2-Robotics-Practice로 돌아가기](https://github.com/2101080JUNGJINYOUNG/ROS2-Robotics-Practice)  ·  📘 [공부하기](../공부하기/10_ROS2인터페이스/README.md)
 
 메시지, 토픽, 서비스, 액션, 인터페이스라는 용어를 명확히 구분하고, 실제 인터페이스 구조를 조회해본 실습입니다.
 
