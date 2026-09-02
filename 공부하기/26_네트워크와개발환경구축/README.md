@@ -1,6 +1,6 @@
 # 26장. 네트워크와 개발환경 구축 — 공부하기
 
-> 🏠 [메인 저장소로 돌아가기](https://github.com/2101080JUNGJINYOUNG/ROS2-Robotics-Practice)  ·  📝 [실습 문제 풀어보기](./문제.md)
+> ⬆ [ROS2-Robotics-Practice로 돌아가기](https://github.com/2101080JUNGJINYOUNG/ROS2-Robotics-Practice/blob/main/README.md)  ·  📝 [실습 문제 풀어보기](./문제.md)
 
 WSL2와 리눅스 네트워크의 기초를 다루는 챕터입니다. 23장(IP 대역 비교)의 내용을 더 깊이 확장해서, 여기 개념들을 알면 23장의 "왜 앞 3자리가 같아야 같은 네트워크인가"도 더 정확히 설명할 수 있게 됩니다.
 
@@ -174,4 +174,4 @@ ping 172.18.30.14
 - 사설 IP를 쓰는 여러 장치가 어떻게 하나의 공인 IP로 동시에 인터넷에 접속할 수 있는가(NAT)?
 ---
 
-🏠 [메인 저장소로 돌아가기](https://github.com/2101080JUNGJINYOUNG/ROS2-Robotics-Practice)
+⬆ [ROS2-Robotics-Practice로 돌아가기](https://github.com/2101080JUNGJINYOUNG/ROS2-Robotics-Practice/blob/main/README.md)
