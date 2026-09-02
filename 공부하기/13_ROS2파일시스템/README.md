@@ -1,5 +1,7 @@
 # 13장. ROS2 파일시스템 — 공부하기
 
+> 🏠 [메인 저장소로 돌아가기](https://github.com/2101080JUNGJINYOUNG/ROS2-Robotics-Practice)
+
 ROS2 패키지를 실제로 만들고 빌드하면서 파일/폴더 구조를 익히는 실습입니다. 11장(CMake)의 지식을 ROS2 패키지 단위로 확장한다고 생각하면 됩니다.
 
 ## 목차
@@ -93,3 +95,6 @@ colcon build --symlink-install --packages-select first_pkg
 - `ros2 pkg create`는 어느 폴더 안에서 실행해야 하는가, 왜 그런가?
 - `build/`, `install/`, `log/`를 전부 지워도 안전한 이유는 무엇인가?
 - `package.xml`과 `CMakeLists.txt`는 각각 무슨 역할을 하는가?
+---
+
+🏠 [메인 저장소로 돌아가기](https://github.com/2101080JUNGJINYOUNG/ROS2-Robotics-Practice)
