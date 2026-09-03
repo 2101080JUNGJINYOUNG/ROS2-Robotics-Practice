@@ -1,6 +1,6 @@
 # 01장. ROS와 ROS2 — 공부하기
 
-> <table style="width:100%"><tr><td>⬆ <a href="https://github.com/2101080JUNGJINYOUNG/ROS2-Robotics-Practice">ROS2-Robotics-Practice로 돌아가기</a>  ·  📝 <a href="./문제.md">실습 문제 풀어보기</a></td><td align="right">📚 <a href="../README.md">공부 목차</a></td></tr></table>
+> ⬆ [ROS2-Robotics-Practice로 돌아가기](https://github.com/2101080JUNGJINYOUNG/ROS2-Robotics-Practice)  ·  📝 [실습 문제 풀어보기](./문제.md)  ·  📚 [공부 목차](../README.md)
 
 이 챕터의 과제는 "ROS가 뭔지"를 개념적으로 정리하는 것입니다. 코드나 명령어 실습이 아니라 용어 정의 과제이므로, 아래 개념들의 차이를 정확히 구분하면 과제를 충분히 풀 수 있습니다.
 
