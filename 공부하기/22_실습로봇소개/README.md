@@ -1,6 +1,6 @@
 # 22장. 실습 로봇 소개 — 공부하기
 
-> ⬆ [ROS2-Robotics-Practice로 돌아가기](https://github.com/2101080JUNGJINYOUNG/ROS2-Robotics-Practice)  ·  📚 [공부 목차](../README.md)  ·  📝 [실습 문제 풀어보기](./문제.md)
+> ⬆ [ROS2-Robotics-Practice로 돌아가기](https://github.com/2101080JUNGJINYOUNG/ROS2-Robotics-Practice)  ·  📝 [실습 문제 풀어보기](./문제.md)  ·  📚 [공부 목차](../README.md)
 
 실습에 쓰인 하드웨어를 조사하는 과제입니다. 23\~25장(카메라, 다이내믹셀, 라인검출)에서 이 장비들이 실제로 코드에 등장하므로, 여기서 장비 역할을 정확히 알아두면 뒤 챕터 코드가 "왜 이런 장치 경로(`/dev/video0`, `/dev/ttyUSB0`)를 쓰는지" 자연스럽게 이해됩니다.
 
@@ -103,4 +103,4 @@ U2D2 -->|데이지체인| M2["Dynamixel 모터 #2 ..."]
 
 ---
 
-⬆ [ROS2-Robotics-Practice로 돌아가기](https://github.com/2101080JUNGJINYOUNG/ROS2-Robotics-Practice)  ·  📚 [공부 목차](../README.md)  ·  📝 [실습 문제 풀어보기](./문제.md)  ·  ➡ [다음 장: 23장. ROS2 카메라 (네트워크 설정 확인)](../23_ROS2카메라/README.md)
+⬆ [ROS2-Robotics-Practice로 돌아가기](https://github.com/2101080JUNGJINYOUNG/ROS2-Robotics-Practice)  ·  📝 [실습 문제 풀어보기](./문제.md)  ·  ➡ [다음 장: 23장. ROS2 카메라 (네트워크 설정 확인)](../23_ROS2카메라/README.md)  ·  📚 [공부 목차](../README.md)
