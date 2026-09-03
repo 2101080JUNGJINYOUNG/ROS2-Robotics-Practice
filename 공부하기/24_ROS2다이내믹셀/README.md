@@ -1,6 +1,6 @@
 # 24장. ROS2 + Dynamixel(다이내믹셀) 제어 — 공부하기
 
-> ⬆ [ROS2-Robotics-Practice로 돌아가기](https://github.com/2101080JUNGJINYOUNG/ROS2-Robotics-Practice)  ·  📝 [실습 문제 풀어보기](./문제.md)  ·  📚 [공부 목차](../README.md)
+> ⬆ [ROS2-Robotics-Practice로 돌아가기](https://github.com/2101080JUNGJINYOUNG/ROS2-Robotics-Practice)  ·  📚 [공부 목차](../README.md)
 
 22장에서 배운 Dynamixel 모터를 실제로 ROS2 노드로 제어하는 실습입니다. 18\~20장(rclcpp 기본 문법)을 이해했다는 전제로 진행되며, 그 지식이 "실제 하드웨어 제어"에 어떻게 응용되는지가 핵심입니다.
 
