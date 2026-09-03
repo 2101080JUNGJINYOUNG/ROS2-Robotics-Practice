@@ -1,6 +1,6 @@
 # 02장. ROS2 개발환경 구축 — 공부하기
 
-> ⬆ [ROS2-Robotics-Practice로 돌아가기](https://github.com/2101080JUNGJINYOUNG/ROS2-Robotics-Practice)  ·  📝 [실습 문제 풀어보기](./문제.md)  ·  📚 [공부 목차](../README.md)
+> ⬆ [ROS2-Robotics-Practice로 돌아가기](https://github.com/2101080JUNGJINYOUNG/ROS2-Robotics-Practice)  ·  📚 [공부 목차](../README.md)
 
 이 챕터는 ROS2(Foxy)를 실제로 설치하고 처음 동작을 확인하는 실습입니다. 명령어를 따라 치는 것도 중요하지만, 왜 이 명령어가 필요한지 알아야 나중에 문제가 생겼을 때 스스로 해결할 수 있습니다.
 
