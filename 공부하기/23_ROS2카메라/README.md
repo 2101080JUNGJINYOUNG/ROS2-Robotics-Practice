@@ -1,6 +1,6 @@
 # 23장. ROS2 카메라 (네트워크 설정 확인) — 공부하기
 
-> ⬆ [ROS2-Robotics-Practice로 돌아가기](https://github.com/2101080JUNGJINYOUNG/ROS2-Robotics-Practice)  ·  📝 [실습 문제 풀어보기](./문제.md)  ·  📚 [공부 목차](../README.md)
+> ⬆ [ROS2-Robotics-Practice로 돌아가기](https://github.com/2101080JUNGJINYOUNG/ROS2-Robotics-Practice)  ·  📚 [공부 목차](../README.md)
 
 이 챕터는 이름과 달리 카메라 코드를 다루지 않고, 로봇에 연결된 여러 장치(Jetson Nano, 내 PC 등)의 IP 주소를 확인해서 같은 네트워크에 있는지 점검하는 실습입니다. ROS2에서 여러 컴퓨터에 걸쳐 노드를 실행할 때 반드시 필요한 사전 점검 작업입니다.
 
