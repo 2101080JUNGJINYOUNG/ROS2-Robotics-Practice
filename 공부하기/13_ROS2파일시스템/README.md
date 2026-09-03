@@ -1,6 +1,6 @@
 # 13장. ROS2 파일시스템 — 공부하기
 
-> ⬆ [ROS2-Robotics-Practice로 돌아가기](https://github.com/2101080JUNGJINYOUNG/ROS2-Robotics-Practice)  ·  📝 [실습 문제 풀어보기](./문제.md)  ·  📚 [공부 목차](../README.md)
+> ⬆ [ROS2-Robotics-Practice로 돌아가기](https://github.com/2101080JUNGJINYOUNG/ROS2-Robotics-Practice)  ·  📚 [공부 목차](../README.md)
 
 ROS2 패키지를 실제로 만들고 빌드하면서 파일/폴더 구조를 익히는 실습입니다. 11장(CMake)의 지식을 ROS2 패키지 단위로 확장한다고 생각하면 됩니다.
 
