@@ -1,6 +1,6 @@
 # 03\~05장. ROS2의 특징, DDS, 패키지와 노드 — 공부하기
 
-> ⬆ [ROS2-Robotics-Practice로 돌아가기](https://github.com/2101080JUNGJINYOUNG/ROS2-Robotics-Practice)  ·  📝 [실습 문제 풀어보기](./문제.md)  ·  📚 [공부 목차](../README.md)
+> ⬆ [ROS2-Robotics-Practice로 돌아가기](https://github.com/2101080JUNGJINYOUNG/ROS2-Robotics-Practice)  ·  📚 [공부 목차](../README.md)
 
 세 챕터를 묶은 과제라서 배경지식도 세 갈래로 나눠서 정리합니다. 이 문서 하나로 3장(ROS2 특징), 4장(DDS), 5장(turtlesim 실습)을 모두 준비할 수 있습니다.
 
