@@ -1,6 +1,6 @@
 # 25장. ROS2 라인 검출 (Line Tracer) — 공부하기
 
-> ⬆ [ROS2-Robotics-Practice로 돌아가기](https://github.com/2101080JUNGJINYOUNG/ROS2-Robotics-Practice)  ·  📚 [공부 목차](../README.md)  ·  📝 [실습 문제 풀어보기](./문제.md)
+> ⬆ [ROS2-Robotics-Practice로 돌아가기](https://github.com/2101080JUNGJINYOUNG/ROS2-Robotics-Practice)  ·  📝 [실습 문제 풀어보기](./문제.md)  ·  📚 [공부 목차](../README.md)
 
 24장의 원격 조작 구조에서 "사람이 조종하던 것"을 "카메라 영상을 스스로 분석해서 판단하는 것"으로 바꾼 실습입니다. `pubpub`(영상 발행)과 `subsub`(영상 구독 + 라인 검출)로 나뉘며, 11장에서 배운 OpenCV 이진화 개념이 실전에서 라인 위치 계산까지 이어지는 과정이 핵심입니다.
 
@@ -151,4 +151,4 @@ void mysub_callback(const sensor_msgs::msg::CompressedImage::SharedPtr msg)
 
 ---
 
-⬆ [ROS2-Robotics-Practice로 돌아가기](https://github.com/2101080JUNGJINYOUNG/ROS2-Robotics-Practice)  ·  📚 [공부 목차](../README.md)  ·  📝 [실습 문제 풀어보기](./문제.md)  ·  ➡ [다음 장: 26장. 네트워크와 개발환경 구축](../26_네트워크와개발환경구축/README.md)
+⬆ [ROS2-Robotics-Practice로 돌아가기](https://github.com/2101080JUNGJINYOUNG/ROS2-Robotics-Practice)  ·  📝 [실습 문제 풀어보기](./문제.md)  ·  ➡ [다음 장: 26장. 네트워크와 개발환경 구축](../26_네트워크와개발환경구축/README.md)  ·  📚 [공부 목차](../README.md)
