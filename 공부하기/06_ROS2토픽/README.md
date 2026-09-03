@@ -22,7 +22,7 @@
 
 ```mermaid
 graph LR
-    Pub1["퍼블리셔 노드"] -- publish --> Topic(("이름이 붙은 토픽\n예: /turtle1/cmd_vel"))
+    Pub1["퍼블리셔 노드"] -- publish --> Topic(("이름이 붙은 토픽<br/>예: /turtle1/cmd_vel"))
     Topic -- subscribe --> Sub1["서브스크라이버 노드 1"]
     Topic -- subscribe --> Sub2["서브스크라이버 노드 2"]
     subgraph DDS["DDS 미들웨어 (동적 검색, 브로커 없음)"]
